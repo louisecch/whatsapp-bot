@@ -1,0 +1,893 @@
+{
+  "extra": {
+    "init_session": "[{0}] Initiating new session",
+    "load_session": "[{0}] Checking session status",
+    "invalid_session": "[{0}] {1} INVALID SESSION ID, SCAN AGAIN!!!",
+    "success_session": "[{0}] Session successfully validated.",
+    "connecting": "[{0}] Connecting...",
+    "connected": "[{0}] Connected {1}",
+    "instance_close": "[{0}] Connection closed",
+    "instance_restart": "[{0}] Instance Restarting...",
+    "reconnect": "[{0}] reconnecting...({1})",
+    "reconnect_after": "[{0}] reconnect after 1 minutes",
+    "another_login": "[{0}] session logined on another device.",
+    "error_message": "```---ERROR REPORT---\\n\\nVersion : {0}\\nMessage : {1}\\nError   : {2}\\nJid     : {3}\\ncommand : {4}\\nPlatform : {5}```\\n\\n```-----``` *Made by LyFE with ❣* ```-----```",
+    "yt_auth_required": "Failed to download: YouTube requires authentication.\\n\\n*Solutions:*\\n1. *Google Auth (Recommended):* Use `.gauth auth` to link your Google account.\\n2. *YT_COOKIE:* Set the `YT_COOKIE` environment variable.\\nWiki: https://github.com/lyfe00011/levanter/wiki/yt%E2%80%90cookie\\n\\n*Error:* {0}",
+    "deleted_message": "           deletedMessage",
+    "install_external_plugin": "[{0}] Installing External plugins...",
+    "installed_external_plugin": "[{0}] External Plugins Installed",
+    "plugin_install": "[{0}] Installing Plugins...",
+    "plugin_installed": "[{0}] Installed {1}",
+    "plugins_installed": "[{0}] Plugins Installed",
+    "plugin_install_error": "[{0}] Error installing {1}, deleting plugin",
+    "plugin_not_found": "[{0}] plugin {1} not found (404), deleting plugin",
+    "group_cmd": "This command is only available in group chats.",
+    "labels": {
+      "sudo": "SUDO",
+      "auto_read": "AUTO READ MSG",
+      "auto_status": "AUTO STATUS VIEW",
+      "auto_reject": "AUTO REJECT CALL",
+      "always_online": "ALWAYS ONLINE",
+      "anti_delete": "ANTI DELETE MSG",
+      "auto_update": "AUTO UPDATE BOT"
+    },
+    "promoted": "promoted",
+    "demoted": "demoted",
+    "file_size_error": "Size is {0}\n\n{1}",
+    "missing_jid": "missing jids",
+    "no_contacts": "not found contacts, please add contacts",
+    "reaction_not_enabled": "Reaction not enabled",
+    "reaction_not_allowed": "this reaction not allowed",
+    "metadata_fetch_failed": "failed to fetch metadata",
+    "lang_not_supported": "' {0} ' language not supported yet, switching to default language.",
+    "screenshot_error": "an error occured",
+    "id_missing": "id missing",
+    "not_on_whatsapp": "{0} is not on whatsapp."
+  },
+  "plugins": {
+    "common": {
+      "reply_to_image": "Reply to a image",
+      "update": "_Settings updated successfully! Your preferences have been saved and are now active._"
+    },
+    "menu": {
+      "help": "```╭────────────────╮\n      ʟᴇᴠᴀɴᴛᴇʀ\n╰────────────────╯\n\n╭────────────────\n│ Prefix : {0}\n│ User : {1}\n│ Time : {2}\n│ Day : {3}\n│ Date : {4}\n│ Version : {5}\n│ Plugins : {6}\n│ Ram : {7}\n│ Uptime : {8}\n│ Platform : {9}\n╰────────────────```",
+      "menu": "```╭═══ LEVANTER ═══⊷\n┃❃╭──────────────\n┃❃│ Prefix : {0}\n┃❃│ User : {1}\n┃❃│ Time : {2}\n┃❃│ Day : {3}\n┃❃│ Date : {4}\n┃❃│ Version : {5}\n┃❃│ Plugins : {6}\n┃❃│ Ram : {7}\n┃❃│ Uptime : {8}\n┃❃│ Platform : {9}\n┃❃╰───────────────\n╰═════════════════⊷```",
+      "disabled": "disabled"
+    },
+    "afk": {
+      "example": "> *AFK Usage:*\n- Set AFK: *afk [reason]*\n- Example: *afk I am busy* Last seen #lastseen ago\n- Sending a message automatically removes AFK status\n- Disable AFK: *afk off*",
+      "not_afk": "You are no longer AFK.",
+      "desc": "Set AFK (Away From Keyboard) status"
+    },
+    "alive": {
+      "default": "I'm alive\nUptime : #uptime",
+      "desc": "Display the bot's alive status message with optional custom text."
+    },
+    "antifake": {
+      "example": "*Antifake Status:* {0}\n\n> *Command Usage:*\n- *antifake list* - View current mode and codes\n- *antifake allow 1,91* - Whitelist Mode: Allow these codes, block all others\n- *antifake disallow 92,93* - Blacklist Mode: Block these codes, allow all others\n- *antifake remove 91* - Remove code from list\n- *antifake clear* - Clear all codes and disable\n- *antifake on | off* - Enable/Disable\n\n> *Note:* Cannot mix whitelist and blacklist modes. Use `clear` to switch modes.",
+      "desc": "Enable or configure anti-fake number (whitelist or blacklist mode)",
+      "not": "No country codes configured.",
+      "status": "Antifake is now *{0}*.",
+      "update": "> Antifake Updated\n*Allowed:* {0}\n*Not Allowed:* {1}",
+      "allow_prompt": "*Please provide country codes to allow (whitelist mode)*\n_Example: antifake allow 1,91_",
+      "disallow_prompt": "*Please provide country codes to disallow (blacklist mode)*\n_Example: antifake disallow 92,93_",
+      "remove_prompt": "*Please provide country codes to remove*\n_Example: antifake remove 91_",
+      "mode_conflict_whitelist": "*⚠️ Cannot mix modes!*\n\n_You are currently in Blacklist Mode. Use `antifake clear` first to switch to Whitelist Mode._",
+      "mode_conflict_blacklist": "*⚠️ Cannot mix modes!*\n\n_You are currently in Whitelist Mode. Use `antifake clear` first to switch to Blacklist Mode._",
+      "whitelist_success": "*✅ Allowed country codes (Whitelist Mode):*\n{0}\n\n_These codes will be allowed, all others will be blocked._",
+      "blacklist_success": "*🚫 Disallowed country codes (Blacklist Mode):*\n{0}\n\n_These codes will be blocked, all others will be allowed._",
+      "removed": "*Removed country codes:*\n{0}",
+      "cleared": "*🗑️ Antifake list cleared and disabled*",
+      "whitelist_mode": "🟢 Whitelist Mode (Allow Only)",
+      "blacklist_mode": "🔴 Blacklist Mode (Block Only)",
+      "enabled": "enabled",
+      "disabled": "disabled"
+    },
+    "antilink": {
+      "desc": "Enable or configure anti-link",
+      "disable": "_Antilink is already disabled._",
+      "antilink_notset": "Antilink is configured to block all links (no URL list set). Use 'antilink allow' or 'antilink disallow' to configure specific URLs.",
+      "status": "Antilink is now *{0}*.",
+      "info": "> Antilink Status: {0}\n*Allowed URLs:* {1}\n *Action :* {2}",
+      "action_invalid": "*Invalid action specified.*",
+      "action_update": "Antilink action updated to: *{0}*",
+      "update": "> Antilink Updated\n*Allowed:* {0}\n*Not Allowed:* {1}",
+      "enabled": "enabled",
+      "disabled": "disabled",
+      "example": "Antilink Status: *{0}*\n\n> Usage Examples:\n- antilink list - View current settings\n- antilink allow whatsapp.com - Allow specific URLs\n- antilink disallow facebook.com - Disallow specific URLs\n- antilink clear allow - Clear allowed URLs\n- antilink clear disallow - Clear disallowed URLs\n- antilink on | off - Enable/Disable antilink\n- antilink kick | warn | null - Set action for link",
+      "allow_prompt": "*Please provide a URL to allow.*",
+      "no_new_urls": "*No new URLs to add.* All URLs already exist in the list.",
+      "urls_updated": "*Allowed URLs updated*\n\nAdded: {0}\nTotal: {1} URL(s)\n\n_Note: URLs are case-insensitive_",
+      "disallow_prompt": "*Please provide a URL to disallow.*",
+      "no_disallowed_urls": "*No new URLs to disallow.* All URLs are already disallowed.",
+      "disallowed_updated": "*Disallowed URLs updated*\n\nAdded to blocklist: {0}\nTotal blocked: {1} URL(s)\n\n_Note: URLs are case-insensitive_",
+      "settings_cleared": "*Antilink settings cleared.*",
+      "allowed_cleared": "*Allowed URLs cleared.*",
+      "disallowed_cleared": "*Disallowed URLs cleared.*"
+    },
+    "antiword": {
+      "desc": "Filter specific words in the group chat",
+      "example": "AntiWord Status: {0}\n> *Usage Examples:*\n- antiword kick | warn | null - Set action for violations\n- antiword on | off - Enable/Disable word filtering\n- antiword add word1,word2 - Add words to block list\n- antiword remove word1,word2 - Remove words from block list\n- antiword list - View blocked words",
+      "action_update": "AntiWord action updated to: *{0}*",
+      "status": "AntiWord is now *{0}*.",
+      "add_prompt": "*Please provide words to add.*",
+      "added": "*Words added:*\n{0}",
+      "remove_prompt": "*Please provide words to remove.*",
+      "removed": "*Words removed:*\n{0}",
+      "activated": "activated",
+      "deactivated": "deactivated",
+      "no_words": "*No words set.*",
+      "info": "*AntiWord Status:* {0}\n*Action:* {1}\n\n*Words:* {2}",
+      "cleared": "*AntiWord list cleared.*"
+    },
+    "apk": {
+      "desc": "Download APK from APKMirror",
+      "example": "> *Usage Examples:*\n- apk Mixplorer\n- apk whatsapp,apkm (includes bundle APKs)",
+      "no_result": "_No results found for your query._",
+      "apps_list": "Matching Apps ({0})"
+    },
+    "delete": {
+      "desc": "Anti-delete: Recover deleted messages",
+      "example": "> *Usage Examples:*\n- delete p - Send deleted messages to your chat/sudo\n- delete g - Send deleted messages in the same group\n- delete off - Disable anti-delete\n- delete <jid> - Send deleted messages to a specific JID",
+      "invalid_jid": "*Error:* _Invalid JID_",
+      "dlt_msg_jid": " _Deleted messages will be sent to: {0}_",
+      "dlt_msg_disable": "Anti-delete has been disabled.",
+      "dlt_msg_sudo": "_Deleted messages will be sent to your chat or sudo._",
+      "dlt_msg_chat": "_Deleted messages will be sent to the chat itself._"
+    },
+    "dlt": {
+      "desc": "delete replied messages"
+    },
+    "fb": {
+      "desc": "Download Facebook video",
+      "example": "",
+      "quality": "Choose Video Quality",
+      "invalid": "*Error:* _No video found for the given URL._"
+    },
+    "fancy": {
+      "desc": "Creates fancy text from given text",
+      "example": "> *Usage:*\nfancy <text>\nfancy <font_number> (reply to a message)\n\n*Example:*\n- fancy Hello\n- fancy 7 (while replying to a message)",
+      "invalid": "*Invalid Font Number!*\nPlease enter a number between *1-47*."
+    },
+    "stop": {
+      "desc": "Delete filters in chat",
+      "example": "> *Usage:*\n- stop <filter>\n- stop hi",
+      "delete": "{0} deleted",
+      "not_found": "_{0} not found in filters._"
+    },
+    "filter": {
+      "desc": "Manage filters in groups",
+      "example": "> *Example:*\n- filter hi (while replying a text message)\n- filter list (Shows current filters)",
+      "list": "> *Current Filters:*\n{0}",
+      "filter_add": "*{0}* filter added"
+    },
+    "forward": {
+      "desc": "Forward replied message to specified JID(s)",
+      "foward": "Message forwarded to: {0}",
+      "example": "Invalid JID!\n> *Usage:*\n- forward <jid>\n- forward 1234567890@s.whatsapp.net"
+    },
+    "save": {
+      "desc": "Forward replied message to yourself",
+      "save": "Message saved!"
+    },
+    "gemini": {
+      "desc": "Google Gemini AI - Ask anything!",
+      "example": "> *Example :*\n- gemini hi\n- gemini what is in the picture(while replying to a image)",
+      "Key": "> Missing Gemini API Key!\nGet one at: https://aistudio.google.com/app/apikey\n\n*Set it using:*\nsetvar GEMINI_API_KEY = your_api_key"
+    },
+    "gstop": {
+      "desc": "Delete gfilters in all groups",
+      "example": "> *Usage:*\n- gstop <filter>\n- gstop hi",
+      "delete": "{0} deleted",
+      "not_found": "_{0} not found in gfilters._"
+    },
+    "pstop": {
+      "desc": "Delete pfilter in all groups",
+      "example": "> *Usage:*\n- pstop <filter>\n- pstop hi",
+      "delete": "{0} deleted",
+      "not_found": "_{0} not found in pfilter._"
+    },
+    "gfilter": {
+      "desc": "Manage global filters in groups",
+      "example": "> *Example :*\n- gfilter hi (while replying to a text message)\n- gfilter list (Shows current gfilters)",
+      "add": "*{0}* gfilter added"
+    },
+    "pfilter": {
+      "desc": "Manage global filters in personal chats",
+      "example": "> *Example :*\n- pfilter hi (while replying to a text message)\n- pfilter list (Shows current pfilters)",
+      "add": "*{0}* pfilter added"
+    },
+    "gpp": {
+      "desc": "change group icon",
+      "update": "_Group icon Updated_"
+    },
+    "greet": {
+      "setdesc": "Set a personalized greeting message",
+      "setexample": "> *Example:* setgreet Hi, this is a bot. My boss will reply shortly.",
+      "setupdate": "_Greeting message has been updated._",
+      "getdesc": "Retrieve the personalized greeting message",
+      "notsetgreet": "> No greeting message has been set.",
+      "deldesc": "Delete the personalized greeting message",
+      "delupdate": "Greeting message has been deleted."
+    },
+    "greetings": {
+      "welcome_desc": "Send a welcome message to new members",
+      "welcome_example": "Welcome is currently *{0}*\n\n> *Usage Examples:*\n- welcome Hi &mention! Welcome to &name - Set welcome message\n- welcome on | off - Enable/Disable\n- welcome delete - Delete message\n\n> *Placeholders:*\n- &mention - Mention new member\n- &name - Group name\n- &desc - Group description\n- &size - Member count\n- &pp - Member's profile picture\n\n> *Media:* Reply to image/video OR include URL in message\n\nFor more details: https://levanter.site/",
+      "welcome_enable": "_Welcome is now enabled_",
+      "welcome_disable": "_Welcome is now disabled_",
+      "welcome_delete": "_Welcome message deleted_",
+      "welcome_not_set": "_Please set a welcome message first!_\n\n> *Example:*\nwelcome Hi &mention! Welcome to &name\n\nThen use: welcome on",
+      "goodbye_desc": "Send a goodbye message to members",
+      "goodbye_example": "Goodbye is currently *{0}*\n\n> *Usage Examples:*\n- goodbye Bye &mention! See you later - Set goodbye message\n- goodbye on | off - Enable/Disable\n- goodbye delete - Delete message\n\n> *Placeholders:*\n- &mention - Mention leaving member\n- &name - Group name\n- &desc - Group description\n- &size - Member count\n- &pp - Member's profile picture\n\n> *Media:* Reply to image/video OR include URL in message\n\nFor more details: https://levanter.site/",
+      "goodbye_enable": "_Goodbye is now enabled_",
+      "goodbye_disable": "_Goodbye is now disabled_",
+      "goodbye_delete": "_Goodbye message deleted_",
+      "goodbye_not_set": "_Please set a goodbye message first!_\n\n> *Example:*\ngoodbye Bye &mention! Thanks for being with us\n\nThen use: goodbye on"
+    },
+    "groq": {
+      "example": "*Example:* groq Hi\n\nYou can optionally set the following environment variables:\n- GROQ_API_KEY\n- GROQ_MODEL\n- GROQ_SYSTEM_MSG\n\nFor more details, visit: https://console.groq.com/keys",
+      "desc": "Interact with GROQ AI"
+    },
+    "kick": {
+      "desc": "Remove members from Group.",
+      "not_admin": "I'm not an admin, so I can't remove members.",
+      "mention_user": "Please mention a user or reply to their message.",
+      "admin": "The specified user is an admin and cannot be removed.",
+      "kicking_all": "Kicking all non-admin members... ({0} members). Restart the bot if you want to stop."
+    },
+    "add": {
+      "desc": "add a member to groups",
+      "warning": "> Avoid adding numbers that aren't saved in contacts; this can increase the risk of being banned.",
+      "not_admin": "I'm not an admin, so I can't add members.",
+      "invalid_number": "Please provide a valid phone number. Example: add 91987654321",
+      "failed": "Failed to add. An invite has been sent instead."
+    },
+    "promote": {
+      "desc": "Give admin role",
+      "not_admin": "I'm not an admin, so I can't modify roles.",
+      "mention_user": "Please mention a user or reply to their message.",
+      "already_admin": "The user is already an admin."
+    },
+    "demote": {
+      "desc": "Remove admin role",
+      "not_admin": "I'm not an admin, so I can't modify roles.",
+      "mention_user": "Please mention a user or reply to their message.",
+      "not_admin_user": "The user is not an admin."
+    },
+    "invite": {
+      "desc": "Get a group invite link",
+      "not_admin": "I'm not an admin, so I can't generate an invite link.",
+      "success": "Here’s the group invite link:\n{0}"
+    },
+    "mute": {
+      "desc": "Makes groups admins only",
+      "not_admin": "I'm not an admin, so I can't change group settings.",
+      "mute": "Muted for {0} minutes."
+    },
+    "unmute": {
+      "desc": "Makes Group All participants can send Message",
+      "not_admin": "I'm not an admin, so I can't change group settings."
+    },
+    "join": {
+      "desc": "Join groups with invite link",
+      "invalid_link": "Please provide a valid WhatsApp group invite link.",
+      "group_full": "The group is full and cannot accept new members.",
+      "success": "Successfully joined the group.",
+      "request_sent": "Join request sent."
+    },
+    "revoke": {
+      "desc": "Revoke Group invite link",
+      "not_admin": "I'm not an admin, so I can't revoke the invite link."
+    },
+    "group_info": {
+      "desc": "Shows group invite link info",
+      "invalid_link": "Please provide a valid WhatsApp invite link.",
+      "details": "*Name:* {0}\n*Group ID:* {1}@g.us\n*Owner:* {2}\n*Members:* {3}\n*Created on:* {4}\n*Description:* {5}"
+    },
+    "common_members": {
+      "desc": "Show or kick common memebers in two or more groups",
+      "found": "Found 0 common members.",
+      "common_usage": "*Example*\ncommon jid\ncommon jid kick\ncommon jid1 jid2\ncommon jid1,jid2 kick\ncommon jid1 jid2 jid3...jid999\n\ncommon jid1 jid2 jid3 any\nkick - to remove only group u command\nkickall - to remove from all jids\nany - to include two or more common group members\nskip - to avoid removing from all, example skip to avoid from one group or skip jid1,jid2,jid3 to skip from.",
+      "ginfo_usage": "*Example : info group_invte_link*"
+    },
+    "insta": {
+      "usage": "Example: insta <Instagram URL>",
+      "not_found": "Not found.",
+      "desc": "Download Instagram posts, reels, and videos."
+    },
+    "ison": {
+      "usage": "Example: ison <phone number>",
+      "not_exist": "`*Not Exist on Whatsapp* ({0})\n`",
+      "exist": "\n*Exist on Whatsapp* ({0})\n",
+      "privacy": "*Privacy Settings on* ({0})\n",
+      "desc": "Check if a phone number is registered on WhatsApp."
+    },
+    "lydia": {
+      "usage": "Usage: lydia on | off\nReply or mention to activate for a specific user.",
+      "activated": "Lydia has been activated.",
+      "deactivated": "Lydia has been deactivated.",
+      "note": "This only works from a reply message.",
+      "desc": "Enable or disable the chatbot feature."
+    },
+    "rotate": {
+      "usage": "Example: rotate right|left|flip (reply to a video).",
+      "not_found": "Please reply to a video and specify a valid rotation direction (right, left, or flip).",
+      "desc": "Rotate a video to the right, left, or flip it.",
+      "convert": "_Converting..._"
+    },
+    "mp3": {
+      "usage": "Reply to a video or audio to convert it to MP3.",
+      "not_found": "Please reply to a video or audio message.",
+      "desc": "Convert a video to audio or an audio clip to a voice note."
+    },
+    "photo": {
+      "usage": "Reply to a photo sticker to convert it to an image.",
+      "desc": "Convert a sticker into an image."
+    },
+    "reverse": {
+      "usage": "Reply to a video or audio to reverse its playback.",
+      "not_found": "Please reply to a video or audio message.",
+      "desc": "Reverse the playback of a video or audio clip."
+    },
+    "cut": {
+      "usage": "Example: cut 0;30 (start;duration) (reply to a video or audio).",
+      "not_found": "Please reply to a video or audio with valid start and duration values (e.g., 10;30).",
+      "desc": "Cut a segment from an audio or video file."
+    },
+    "trim": {
+      "usage": "Example: trim 10;30 (reply to a video).",
+      "not_found": "Please reply to a video with valid start and duration values (e.g., 60;30).",
+      "desc": "Trim a video between specified start and duration times."
+    },
+    "page": {
+      "usage": "Example: page 1 (reply to an image).",
+      "not_found": "Please reply to an image with a numeric caption indicating the page number.",
+      "desc": "Add an image as a page to a PDF document.",
+      "add": "Page {0} added!"
+    },
+    "pdf": {
+      "usage": "Example: pdf note (provide a title for the PDF).",
+      "not_found": "Please provide a title for the PDF document.",
+      "desc": "Convert images to a PDF document."
+    },
+    "merge": {
+      "usage": "Example: merge 1 (reply with an order number to a video).",
+      "not_found": "Please reply to a video with a valid order number.",
+      "desc": "Merge multiple videos into one.",
+      "merge": "_Merging {0} videos_",
+      "add": "_Video {0} added_"
+    },
+    "compress": {
+      "usage": "Reply to a video to compress it.",
+      "desc": "Compress a video file to reduce its size."
+    },
+    "bass": {
+      "usage": "Example: bass 10 (reply to an audio or video).",
+      "desc": "Alter the bass levels of an audio file."
+    },
+    "treble": {
+      "usage": "Example: treble 10 (reply to an audio or video).",
+      "desc": "Alter the treble levels of an audio file."
+    },
+    "histo": {
+      "usage": "Reply to an audio or video to generate a histogram video.",
+      "desc": "Convert audio to a visual video histogram."
+    },
+    "vector": {
+      "usage": "Reply to an audio or video to create a vector visualization video.",
+      "desc": "Convert audio to a vector visualization video."
+    },
+    "crop": {
+      "usage": "Example: crop 512,512,0,512 (reply to a video).",
+      "not_found": "Please reply to a video with valid crop dimensions in the format: out_w,out_h,x,y.",
+      "desc": "Crop a video to the specified dimensions.",
+      "xcrop": "Video width: *{0}*, height: *{1}*\nChoose output size in between."
+    },
+    "low": {
+      "usage": "Reply to an audio or video to lower the pitch.",
+      "desc": "Alter the audio pitch to a lower tone."
+    },
+    "pitch": {
+      "usage": "Reply to an audio or video to adjust the pitch.",
+      "not_found": "Please reply to an audio or video message.",
+      "desc": "Adjust the pitch of an audio file."
+    },
+    "avec": {
+      "usage": "Reply to an audio or video to convert it into a video format.",
+      "not_found": "Please reply to an audio or video message.",
+      "desc": "Convert an audio clip into a video."
+    },
+    "avm": {
+      "usage": "Reply with both audio and video to merge them.",
+      "desc": "Merge audio and video files into one.",
+      "audio_add": "_Audio added!_",
+      "video_add": "_Video added!_"
+    },
+    "black": {
+      "usage": "Reply to an audio or video to generate a video with a black background.",
+      "desc": "Convert an audio clip into a video with a black background."
+    },
+    "mediafire": {
+      "usage": "Example: mediafire <Mediafire URL>",
+      "not_found": "File not found. Please verify the URL and try again.",
+      "desc": "Download a file from Mediafire."
+    },
+    "mention": {
+      "usage": "Example: mention on | off | get\n(Reply to a message to target a specific user.)",
+      "desc": "Configure and manage the mention feature for automated replies.",
+      "not_activated": "Reply to mention not activated.",
+      "current_status": "Mention is {0}. For details, visit: https://levanter.site/",
+      "activated": "Reply-to mention activated.",
+      "deactivated": "Reply-to mention deactivated.",
+      "updated": "Mention settings updated."
+    },
+    "status": {
+      "usage": "Usage: status on | off | no-dl | except-view <jid,...> | only-view <jid,...>",
+      "desc": "Automatically manage the viewing of WhatsApp statuses."
+    },
+    "call": {
+      "usage": "Usage: call on | off",
+      "desc": "Automatically reject incoming calls."
+    },
+    "read": {
+      "usage": "Usage: read on | off",
+      "desc": "Enable or disable auto-reading of incoming messages."
+    },
+    "online": {
+      "usage": "Usage: online on | off",
+      "desc": "Keep your account status always online."
+    },
+    "movie": {
+      "usage": "Example: movie <movie title>",
+      "not_found": "Movie not found. Please verify the title and try again.",
+      "desc": "Fetch detailed movie information, including the full plot, from the OMDB API."
+    },
+    "msgs": {
+      "desc": "Display the group's message count for each member, including individual totals and last seen duration.",
+      "msg_init": "\n*Number :* {0}\n*Name :* {1}\n*Total Msgs :* {2}\n",
+      "msg_last": "*lastSeen :* {0} ago\n",
+      "no_activity": "No activity recorded yet."
+    },
+    "reset": {
+      "usage": "Example: reset all OR reset <reply/mention>",
+      "desc": "Reset the message count for either the entire group or a specific member.",
+      "reset_all": "Everyones messages counts deleted",
+      "reset_one": "_@{0} messages counts deleted._"
+    },
+    "inactive": {
+      "usage": "> Examples:\n-inactive day 10\n- inactive day 10 kick\n- inactive total 100\n- inactive total 100 kick\n- inactive day 7 total 150\n- inactive day 7 total 150 kick\n\nif kick not mentioned, Just list",
+      "desc": "Identify or remove inactive members based on message count or inactivity duration. Append 'kick' to remove members.",
+      "inactives": "_Total inactives are : {0}_",
+      "removing": "_Removing {0} inactive members in 7 seconds_"
+    },
+    "weather": {
+      "desc": "weather info",
+      "usage": "*Example : weather delhi*",
+      "not_found": "_{0} not found_",
+      "report": "*Name :* {0}\n*Country :* {1}\n*Weather :* {2}\n*Temp :* {3}°\n*Feels Like :* {4}°\n*Humidity :* {5}%\n*Visibility  :* {6}m\n*Wind* : {7}m/s {8}\n*Sunrise :* {9}\n*Sunset :* {10}"
+    },
+    "y2mate": {
+      "ytv_desc": "Download YouTube video",
+      "ytv_usage": "_Example: ytv url_",
+      "yta_desc": "Download YouTube audio",
+      "yta_usage": "_Example: yta darari/yt url_",
+      "invalid_link": "*Provide a valid YouTube link!*",
+      "no_video": "*No video found*",
+      "no_audio": "_Audio not found._"
+    },
+    "amute": {
+      "usage": "Usage: amute <hour> <min>\n- amute on | off\n- amute info\n\nReply with text to set a mute message",
+      "desc": "Schedule automatic group muting at a specified time with an optional custom message.",
+      "not_found": "AutoMute settings not found.",
+      "already_disabled": "AutoMute already disabled.",
+      "enabled": "AutoMute Enabled.",
+      "disabled": "AutoMute Disabled.",
+      "invalid_format": "> Example:\n- amute 6 0\n- amute on | off\n- amute info\n\nReply with text to set a mute message.",
+      "scheduled": "Group will mute at {0}\n*message :* {1}",
+      "info": "Hour: {0}\nMinute: {1}\nTime: {2}\nMute: {3}\nMessage: {4}"
+    },
+    "aunmute": {
+      "usage": "Usage: aunmute <hour> <min>\n- aunmute on | off\n- aunmute info\nReply with text to set an unmute message",
+      "desc": "Schedule automatic group unmuting at a specified time with an optional custom message.",
+      "not_found": "AutoUnMute settings not found.",
+      "already_disabled": "AutoUnMute already disabled.",
+      "enabled": "AutoUnMute Enabled.",
+      "disabled": "AutoUnMute Disabled.",
+      "invalid_format": "> Example:\n- aunmute 16 30\n- aunmute on | off\n- aunmute info\n\nReply with text to set an unmute message.",
+      "scheduled": "Group will unmute at {0}\n*message :* {1}",
+      "info": "Hour: {0}\nMinute: {1}\nTime: {2}\nMute: {3}\nMessage: {4}"
+    },
+    "zushi": {
+      "usage": "> Example:\n- zushi ping, sticker\n- To set all commands, type 'list' and then reply with the copied message (e.g., zushi copied_message).",
+      "desc": "Allows you to enable specific commands for use by others in the chat.",
+      "already_set": "{0} is already configured.",
+      "allowed": "*allowed commands for* @{0}\n{1}",
+      "no_input": "⚠️ Please provide command names\n\n📝 Examples:\n  • .zushi song video sticker\n  • .zushi img trt translate\n\n💡 Add multiple commands separated by spaces",
+      "duplicates": "❌ Commands already allowed: {0}\n\n📋 Current allowed commands ({1} total):\n{2}\n\n💡 Use .yami to see all allowed commands\n💡 Use .ope to remove commands",
+      "invalid": "⚠️ No valid commands found\n\nSkipped invalid: {0}\n\n💡 Use .help to see available commands",
+      "error": "❌ Error: {0}",
+      "success": "✅ Successfully added {0} command{1}:\n{2}\n\n📊 Total allowed: {0} command{1} for @{3}\n\n💡 Users can now use these commands"
+    },
+    "yami": {
+      "usage": "Simply use: yami",
+      "desc": "Displays the list of commands that are currently allowed in this chat.",
+      "not_set": "No allowed commands have been set yet.",
+      "no_commands": "📋 No allowed commands found\n\n💡 Use .zushi to add commands\n📝 Example: .zushi song video sticker",
+      "list": "📋 Allowed commands for @{0}:\n\n{1}\n\n📊 Total: {2} command{3}\n\n💡 Remove with: .ope <command names>\n💡 Remove all: .ope all"
+    },
+    "ope": {
+      "usage": "Example: ope ping, sticker OR ope all",
+      "desc": "Deletes or unsets the specified allowed commands.",
+      "not_found": "No allowed commands found for {0}.",
+      "all_removed": "All allowed commands have been removed.",
+      "removed": "*removed commands for* @{0}\n{1}",
+      "no_input": "⚠️ Please provide command names to remove\n\n📝 Examples:\n  • .ope song video\n  • .ope all (removes everything)\n\n💡 Use .yami to see allowed commands",
+      "not_found_list": "❌ Command{0} not found: {1}{2}\n\n💡 Use .yami to see all allowed commands\n📝 Example: .ope song video",
+      "error": "❌ Error: {0}",
+      "no_commands": "⚠️ No commands found for this user/group\n\n💡 Use .zushi to add commands first",
+      "all_success": "✅ All commands removed\n\n💡 Use .zushi to add new commands",
+      "success": "✅ Removed {0} command{1}:\n{2}\n\n📊 For: @{3}\n\n💡 Use .yami to see remaining commands\n💡 Use .ope all to remove everything"
+    },
+    "pdm": {
+      "usage": "Usage: pdm on | off",
+      "desc": "Enable or disable automatic notifications for promote/demote events in the group.",
+      "not_found": "Please specify 'on' or 'off'. For example: pdm on",
+      "activated": "Promote/demote alert activated.",
+      "deactivated": "Promote/demote alert deactivated."
+    },
+    "ping": {
+      "desc": "Check the bot's response time (latency).",
+      "ping_sent": "Ping!",
+      "pong": "Pong! Response time: {0} ms"
+    },
+    "pinterest": {
+      "usage": "Example: pinterest <Pinterest URL>",
+      "not_found": "No media found. Please check the URL and try again.",
+      "desc": "Download Pinterest videos or images."
+    },
+    "plugin": {
+      "usage": "> Example:\n- plugin <Gist URL>\n- plugin list",
+      "desc": "Install external plugins by providing a Gist URL containing the plugin code, or list all installed plugins.",
+      "invalid": "Please provide a valid plugin URL or plugin name.",
+      "not_installed": "No plugins are currently installed.",
+      "installed": "Newly installed plugins: {0}"
+    },
+    "remove": {
+      "usage": "> Example:\b- remove <plugin_name>\n- remove all",
+      "desc": "Delete external plugins by specifying the plugin name or remove all installed plugins.",
+      "not_found": "Plugin *{0}* not found.",
+      "removed": "Plugins have been successfully removed."
+    },
+    "reboot": {
+      "desc": "Restart the bot instance using PM2.",
+      "starting": "Restarting..."
+    },
+    "fullpp": {
+      "usage": "Example: fullpp (reply to an image)",
+      "desc": "Set full-size profile picture.",
+      "updated": "Profile picture updated."
+    },
+    "jid": {
+      "desc": "Returns the JID of a user or chat. It checks for a mentioned user, a reply message, or defaults to the current chat's JID."
+    },
+    "left": {
+      "desc": "Leaves the current group. If additional text is provided, it will be sent before leaving."
+    },
+    "block": {
+      "usage": "Example: block (reply to or mention a user)",
+      "desc": "Blocks the specified user.",
+      "status": "Blocked"
+    },
+    "unblock": {
+      "usage": "Example: unblock (reply to or mention a user)",
+      "desc": "Unblocks the specified user.",
+      "status": "_Unblocked_"
+    },
+    "pp": {
+      "usage": "Example: pp (reply to an image)",
+      "desc": "Updates your profile picture using the image from the replied message."
+    },
+    "whois": {
+      "number": "*Number :* {0}",
+      "name": "*Name :* {0}",
+      "about": "*About :* {0}",
+      "setAt": "*setAt :* {0}",
+      "owner": "*Owner :* {0}",
+      "members": "*Members* : {0}",
+      "description": "*desc* : {0}",
+      "created": "*Created* : {0}",
+      "usage": "Example: whois <jid or user identifier>",
+      "desc": "Displays the profile picture and additional information (e.g., about, status) of a user or group."
+    },
+    "gjid": {
+      "desc": "Lists all group JIDs along with their group names.",
+      "item": "*{0}. {1}*\n{2}\n"
+    },
+    "qr": {
+      "usage": "Example: qr test  OR  reply to a QR image with qr",
+      "desc": "Generate a QR code from the provided text or decode a QR code from a replied image."
+    },
+    "reddit": {
+      "usage": "Example: reddit <URL>",
+      "desc": "Downloads a video from the specified Reddit post using the provided URL.",
+      "error": "No video found for the given URL."
+    },
+    "rmbg": {
+      "usage": "Example: rmbg (reply to an image)",
+      "desc": "Removes the background from the replied image using the remove.bg API",
+      "key": "To use this command, ensure you have signed up at remove.bg, verified your account, copied your API key, and set it using .setvar RMBG_KEY:<your_api_key> (e.g., .setvar RMBG_KEY:GWQ6jVy9MBpfYF9SnyG8jz8P). SIGNUP: https://accounts.kaleido.ai/users/sign_up | API KEY: https://www.remove.bg/dashboard#api-key",
+      "error": "Missing API key or image. Please set your API key and reply to an image."
+    },
+    "setschedule": {
+      "usage": "> *Example :*\n- setschedule jid,min-hour-day-month (in 24 hour format, day and month optional)\n- setschedule tomorrow at 10am (Natural Language Support)\n- setschedule every day at 10am (Repeating)\n- setschedule 0-10 (Defaults to 'once' for current chat)",
+      "desc": "Schedule a message using natural language (e.g., 'tomorrow at 10am') or cron-like format. Defaults to 'once' for the current chat.",
+      "invalid": "Invalid schedule format or time. Please follow one of the examples provided.",
+      "no_reply": "Please reply to the message that you want to schedule for sending.",
+      "scheduled": "_Successfully scheduled to send at_ *{0}* _in_ @{1}."
+    },
+    "getschedule": {
+      "desc": "Retrieve all scheduled messages for the specified chat.",
+      "not_found": "There are no scheduled messages.",
+      "time": "Time : {0}"
+    },
+    "delschedule": {
+      "usage": "> Example:\n- delschedule 9198765431@s.whatsapp.net, 8-8-10-10\n- delschedule 9198765431@s.whatsapp.net\n- delschedule all",
+      "desc": "Delete a scheduled message by specifying the target JID and time, or remove all scheduled messages.",
+      "invalid": "Invalid format. Please follow one of the examples.",
+      "not_found": "Schedule not found.",
+      "deleted": "_Schedule deleted._"
+    },
+    "setstatus": {
+      "usage": "Example: setstatus jid,jid,jid,... OR setstatus contact",
+      "desc": "Set a WhatsApp status for specific contacts or for imported contacts. Reply to a message (text, image, or video) to set the status.",
+      "reply_required": "Please reply to a message to set the status.",
+      "sent": "_Status sent to {0} contacts._"
+    },
+    "scstatus": {
+      "usage": "Examples:\n- scstatus jid,jid,jid,...|min-hour-day-month (day and month optional)\n- scstatus contact|min-hour-day-month\n- scstatus delete all|min-hour-day-month\n- scstatus list",
+      "desc": "Schedule a WhatsApp status to be sent at a specified time. Use 'contact' for imported contacts or provide specific JIDs.",
+      "reply_required": "Please reply to a message to schedule the status.",
+      "invalid": "Invalid format. Please follow one of the examples provided.",
+      "scheduled": "_Successfully scheduled to send at_ {0}.",
+      "list": "Scheduled status list:",
+      "deleted": "Schedule deleted."
+    },
+    "antispam": {
+      "desc": "Manage antispam protection with configurable levels",
+      "usage": "Use: antispam <on/off/low/medium/high/warn/delete/kick/info>",
+      "disabled_status": "📊 *Antispam Status*\n\n🔴 Disabled\n\nUse `antispam on` to enable protection",
+      "info_status": "📊 *Antispam Status*\n\n{status}\nLevel: {level}\nAction: {action}",
+      "deactivated": "⚠️ *Antispam Protection Disabled*\n\nSpam detection is now OFF",
+      "activated": "✅ *Antispam Protection Enabled*\n\nLevel: {level} ({description})\nAction: {action}",
+      "level_set": "✅ *Level Changed*\n\nNew level: {level}",
+      "action_set": "✅ *Action Changed*\n\nSpammers will be: {action_desc}",
+      "invalid_level": "❌ Invalid level. Use: low, medium, high",
+      "help": "📖 *Antispam Help*\n\n*Commands:*\n• `antispam on` - Enable (default: medium)\n• `antispam off` - Disable\n• `antispam <low/medium/high>` - Change sensitivity\n• `antispam <warn/delete/kick>` - Change action\n• `antispam info` - View current settings\n\n*Levels:*\n• Low - Relaxed (active groups)\n• Medium - Balanced (recommended)\n• High - Strict (problem groups)",
+      "spam_warning": "⚠️ @{mention} Stop spamming!",
+      "action_warn": "warned (not kicked)",
+      "action_delete": "messages deleted only",
+      "action_kick": "kicked from group"
+    },
+    "sticker": {
+      "desc": "Convert an image or video to a sticker. Reply to an image or video message to generate a sticker.",
+      "reply_required": "Please reply to an image or video."
+    },
+    "circle": {
+      "desc": "Convert an image into a circular sticker.",
+      "reply_required": "Please reply to an image."
+    },
+    "take": {
+      "usage": "Example: take <title,artists,url> (reply to a sticker or audio). For audio, title is required; artists and URL are optional.",
+      "desc": "Change the sticker pack by updating its metadata. If replying to a sticker, update its pack metadata. If replying to audio, add metadata (title, artists, URL) to the file.",
+      "reply_required": "Please reply to a sticker or audio message.",
+      "additional_info": "For audio metadata, the artists or URL are optional."
+    },
+    "mp4": {
+      "desc": "Convert an animated sticker (WebP) into an MP4 video.",
+      "reply_required": "Please reply to an animated sticker."
+    },
+    "story": {
+      "usage": "Example: story <username> (or reply to a message containing the username)",
+      "desc": "Download Instagram stories for the specified username. If multiple stories are available, a list will be provided for selection.",
+      "not_found": "No stories found for the provided username.",
+      "list": "Total {0} stories available. Please select one to download.\n"
+    },
+    "tag": {
+      "usage": "Example: tag all | tag admin | tag notadmin | tag <custom message> (or reply to a message with 'tag')",
+      "desc": "Tag members in the group based on your choice. Use 'all' to mention every member, 'admin' to mention only group admins, 'notadmin' to mention non-admin members, or provide a custom message to be sent along with the mentions."
+    },
+    "tictactoe": {
+      "usage": "Example: tictactoe <opponent_jid> OR tictactoe normal <opponent_jid> OR tictactoe restart <opponent_jid> OR tictactoe end\nDefault mode is infinite, use 'tictactoe normal' for normal mode.",
+      "desc": "Play a TicTacToe game against an opponent. Challenge a user by mentioning them, replying to their message, or specifying their JID. Use 'tictactoe end' to finish the game and 'tictactoe restart <opponent_jid>' to restart with a new opponent. Default mode is infinite, use 'tictactoe normal' for normal mode.",
+      "choose_opponent": "Please choose an opponent by replying to a message or mentioning a user. You cannot play against yourself.",
+      "game_ended": "Game ended.",
+      "game_restarted": "Game restarted with the new opponent.",
+      "invalid_input": "Invalid input. Please provide a valid opponent or use 'end' or 'restart' appropriately.",
+      "players": "Players",
+      "already_occupied": "_Already Occupied_",
+      "current_player": "currentPlayer",
+      "game_finish": "Game Finish 🏁",
+      "winner": "Winner",
+      "restart": "Restart Game",
+      "header": "---Tic Tac Toe---"
+    },
+    "tiktok": {
+      "usage": "Usage: tiktok <TikTok URL> (or reply to a message with the URL)",
+      "desc": "Download a TikTok video from the provided URL.",
+      "not_found": "Video not found. Please verify the URL and try again."
+    },
+    "tog": {
+      "usage": "Example: tog ping off",
+      "desc": "Enable or disable a bot command.",
+      "invalid": "Invalid input. Use: tog <command> on|off (e.g., tog ping off)",
+      "self_reference": "Did you really want to kill me?",
+      "enabled": "{0} Enabled.",
+      "disabled": "{0} Disabled."
+    },
+    "trt": {
+      "usage": "Example: trt ml hi OR trt ml (reply to a text message)",
+      "desc": "Translate text using Google Translate. Specify the target language code (and optionally the source language code) when replying to a message."
+    },
+    "twitter": {
+      "usage": "Example: twitter <Twitter URL> (or reply to a message containing the URL)",
+      "desc": "Download a Twitter video. If multiple quality options are available, you'll be prompted to choose one.",
+      "not_found": "No video found for the provided Twitter URL.",
+      "choose_quality": "> Choose Video Quality\n"
+    },
+    "upload": {
+      "usage": "Example: upload <URL> (or reply to a message containing a URL)",
+      "desc": "Download media from a provided URL. For shortened Google Images URLs, the direct image URL is retrieved automatically."
+    },
+    "url": {
+      "usage": "Example: url OR url imgur (reply to an image or video)",
+      "desc": "Convert an image or video to a URL. Optionally, specify a parameter (e.g., 'imgur') to get the URL from a specific service."
+    },
+    "getvar": {
+      "usage": "Example: getvar sudo",
+      "desc": "Display the value of a variable. Provide the variable key (case-insensitive) to retrieve its value.",
+      "not_found": "{0} not found in vars."
+    },
+    "delvar": {
+      "usage": "Example: delvar sudo",
+      "desc": "Delete a variable by specifying its key.",
+      "not_found": "{0} not found in vars.",
+      "deleted": "{0} deleted."
+    },
+    "setvar": {
+      "usage": "Example: setvar key = value",
+      "desc": "Set a variable with a specific key and value. Use '=' to separate the key from the value.",
+      "success": "New var {0} added as {1}."
+    },
+    "allvar": {
+      "desc": "Display all stored variables in sorted order."
+    },
+    "vote": {
+      "usage": "> Example :\nvote q|What your favorite color?\no|😀|Blue\no|😊|Red",
+      "desc": "Initiate a vote in a WhatsApp group.",
+      "notes": "If no recipients are specified, the vote message will simply be sent to the current group.",
+      "no_vote": "No votes available!",
+      "total_vote": "total votes : *{0}*",
+      "delete_vote": "Delete the current vote to set a new one.",
+      "option_required": "two or more options required",
+      "question_required": "question required",
+      "vote": "React or reply option to vote.",
+      "vote_deleted": "_Vote deleted._",
+      "voted": "@{0} voted for {1}\n\n${2}"
+    },
+    "warn": {
+      "usage": "Example: warn @user OR warn reset @user. You can also reply to a user's message and type 'warn' or 'warn reset'.",
+      "desc": "Warn a user in the group chat. This command increases a user's warning count. If the count exceeds the limit, the user will be kicked from the group. Use 'warn reset' to clear a user's warnings.",
+      "reset_usage": "Example: warn reset @user (or reply to a user's message and type 'warn reset').",
+      "cannot_remove_admin": "I cannot remove an admin.",
+      "kick_default": "{0} has been kicked for exceeding warn limit.",
+      "warn_default": "⚠️ Warning {0}! {1}/{2} warnings remaining."
+    },
+    "wcg": {
+      "usage": "Examples:\n- wcg start (force start the word chain game)\n- wcg end (end the current game)\nDefault mode is easy.",
+      "desc": "Word Chain Game: continue the word chain by submitting a word. use 'wcg start' to force start and 'wcg end' to stop.",
+      "game_ends": "Game Ends",
+      "already_used": "_This word is already used!_",
+      "not_starting_with": "_{0} is not starting with_ {1}",
+      "length_limit": "_This word is below {0} length_",
+      "not_in_list": "_This word is not in my list_",
+      "turn_info": "🎲Turn : @{0}\n🙌Next : @{1}\n🆎Starts with {2} (at least {3} letters)\n🏆Players left : {4}/{5}\n⏳ You have *{6}* seconds to reply\n📝Total words : {7}",
+      "timeout": "Time out @{0}! You are out! 🚫",
+      "winner": "@{0} won the game 🏆\nWords : *{1}*\nLongest word : *{2} ({3})* by @{4} 📚\nTime : *{5}* ⏱️",
+      "joined": "@{0} joined 👏",
+      "starting": "🎮 Game starting...\n👥 Need 2 or more players\n⏳ You have 60 seconds to join ⏳\n🧩 Mode {0}",
+      "starts_in": "🎮 Game starts in {0} seconds ⏳\nType *join* to play 🙋‍♂️🙋‍♀️\n🧩 Mode {1}{2}",
+      "players_count": "\n\n👥 {0} players joined.",
+      "terminated": "_Not enough players to start. Game terminated._",
+      "mode_update": "_WCG mode updated to {0}_"
+    },
+    "wrg": {
+      "usage": "Examples:\n- wrg start (force start the random word game)\n- wrg hard (start in hard mode)\n- wrg easy (start in easy mode)\n- wrg end (end the current game)",
+      "desc": "Random Word Game: Engage in a game where you submit words in response to a random prompt. Use 'wrg start' to begin a new game or 'wrg end' to finish the game."
+    },
+    "yts": {
+      "usage": "Example: yts baymax",
+      "desc": "Search for YouTube videos by query or URL. If a valid YouTube URL is provided, detailed information for the first video is returned."
+    },
+    "song": {
+      "usage": "Example: song indila love story OR song <YouTube URL> (reply to a message is also supported)",
+      "desc": "Download a song from YouTube. If a URL is provided, the song is downloaded directly; otherwise, a search is performed and a list of results is generated for selection.",
+      "not_found": "No song found for the provided query or URL."
+    },
+    "video": {
+      "usage": "Example: video 720p <YouTube URL> OR video <YouTube URL>",
+      "desc": "Download a YouTube video. You can optionally specify quality (e.g., 720p, 1080p). Default is 480p.",
+      "not_found": "No video found for the provided query or URL."
+    },
+    "update": {
+      "usage": "Example: update",
+      "desc": "Check for new updates. Displays available updates or confirms that the bot is up-to-date.",
+      "up_to_date": "Bot is already up-to-date.",
+      "available": "{0} new updates available:\n{1}"
+    },
+    "update_now": {
+      "usage": "Example: update now",
+      "desc": "Update the bot to the latest version.",
+      "up_to_date": "Bot is already up-to-date. No updates available.",
+      "updating": "Updating bot...",
+      "updated": "Bot has been successfully updated!"
+    },
+    "antigm": {
+      "usage": "> Usage:\n- antigm on | off — Enable or disable anti group mention\n- antigm delete | warn | kick — Set action when someone mentions the group\n- antigm ignore jid,jid,... — Ignore anti group mention from specific groups",
+      "action": "Action updated: group mentions will now result in *{0}*.",
+      "filter": "Ignore JIDs updated for anti group mention.",
+      "enabled": "Anti group mention has been enabled.",
+      "disabled": "Anti group mention has been disabled."
+    },
+    "reminder": {
+      "desc": "Add a reminder to Google Calendar (natural language supported).",
+      "usage": "*Reminder Command Usage:*\n\n- reminder <text> (add event)\n- reminder list (view upcoming)\n- reminder del <id> (delete event)\n- Example: `reminder tomorrow at 10am meeting`",
+      "success": "*Reminder Added!*\n\n*Event:* {0}\n*Time:* {1}\n*Link:* {2}",
+      "list": "*Upcoming Reminders:*\n\n{0}",
+      "list_empty": "No upcoming reminders found.",
+      "deleted": "Reminder deleted successfully!",
+      "invalid_id": "Invalid reminder ID.",
+      "auth_required": "*Authentication Required:*\n\nUse \"gauth\" to authorize the bot.",
+      "time": "Time",
+      "id": "ID",
+      "short_id_info": "\n\n*Note:* You only need to enter the first 2-4 characters of the ID for the delete command."
+    },
+    "gauth": {
+      "desc": "Manage Google Authentication (Authenticate, Import, Logout, Status). Optional for YouTube but required for premium features.",
+      "usage": "*Google Auth Commands:*\n\n- `.gauth auth` — Start the authentication process.\n- `.gauth code <url_or_code>` — Validate the authentication code.\n- `.gauth import` — Import `credentials.json` (Reply to the file).\n- `.gauth status` — Check current authentication status.\n- `.gauth logout` — Clear credentials and tokens for this session.\n\n*Note:* Google Auth is optional for general YouTube features but required for age-restricted videos and Google Drive/Calendar/Tasks integrations.",
+      "prompt": "*Google Authentication Setup Guide:*\n\n1. *Create Project:* Go to https://console.cloud.google.com/, click \"Select a project\" > \"New Project\", name it \"Levanter\" and click \"Create\".\n2. *Enable APIs:* Go to \"APIs & Services\" > \"Library\". Search and enable \"Google Drive API\", \"Google Calendar API\" and \"Google Tasks API\".\n3. *OAuth Consent:* Go to \"APIs & Services\" > \"OAuth consent screen\". Choose \"External\", fill required fields, and in the \"Audience\" section, add your email to \"Test users\" (MANDATORY).\n4. *Credentials:* Go to \"APIs & Services\" > \"Credentials\". Click \"Create Credentials\" > \"OAuth client ID\". Select \"Desktop app\" as the application type, name it, and click \"Create\".\n5. *Download:* Beside your new Client ID, click the Download (JSON) icon. Save it and use `.gauth import` by replying to the file.\n6. *Authorize:* Now click the link below to authorize:\n{0}\n\n7. *Complete:* Log in, accept the \"Unverified app\" warning (Click \"Advanced\" > \"Go to Levanter\"), copy the full URL from the bar after redirect, and send:\n`.gauth code <copied_url>`",
+      "success": "Authentication successful!",
+      "import_success": "`credentials.json` imported successfully! Now use `.gauth auth` to authorize.",
+      "import_reply": "Please reply to a `credentials.json` file.",
+      "status_auth": "*Status:* Authenticated for session.",
+      "status_not_auth": "*Status:* Not authenticated for session. Use `.gauth auth`.",
+      "logout": "Logged out and cleared Google Auth data for session.",
+      "failed": "*Failed:* {0}"
+    },
+    "gdrive": {
+      "desc": "Google Drive operations (upload, list, delete).",
+      "upload_success": "Upload complete!",
+      "uploading": "Uploading media to Drive...",
+      "not_authorized": "Not authorized. Use \"backup auth\".",
+      "list": "*Google Drive Files:*\n\n{0}",
+      "list_empty": "No files found in Levanter folder.",
+      "deleted": "File deleted successfully!",
+      "invalid_id": "Please provide a valid file ID.",
+      "error": "*Error:* {0}",
+      "url_prompt": "Please provide a valid URL, tag a media message, or use subcommands: list, del <id>, dl <id>.\nExample: `gupload list`",
+      "short_id_info": "\n\n*Note:* You only need to enter the first 2-4 characters of the ID for download or delete commands."
+    },
+    "task": {
+      "desc": "Manage your Google Tasks",
+      "usage": "Usage: task <list | list-lists | list-switch <name> | add <text> | del <id> | done <id> | update <id> <text> | <text>>",
+      "added": "Task added: *{0}*\nDue: {1}",
+      "deleted": "Task deleted.",
+      "updated": "Task *{0}* marked as *{1}*",
+      "list_empty": "No tasks found.",
+      "list_header": "📝 *Tasks ({0})*:\n",
+      "not_found": "Task not found.",
+      "auth_required": "Please authenticate using *.gauth auth* and enable Google Tasks permissions.",
+      "list_lists": "📝 *Task Lists*:\n",
+      "switched": "Switched default task list to *{0}*."
+    }
+  }
+}

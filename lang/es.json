@@ -1,0 +1,893 @@
+{
+  "extra": {
+    "init_session": "[{0}] Iniciando Nueva Sesion",
+    "load_session": "[{0}] Comprobando estado de sesion",
+    "invalid_session": "[{0}] {1} ID DE SESION INVALIDA, ESCANEA DE NUEVO!!!",
+    "success_session": "[{0}] Sesion validada exitosamente.",
+    "connecting": "[{0}] Conectando...",
+    "connected": "[{0}] Conectado {1}",
+    "instance_close": "[{0}] La Conexion se ha Cerrado",
+    "instance_restart": "[{0}] La Instancia se esta Reiniciando...`",
+    "reconnect": "[{0}] Reconectando...({1})",
+    "reconnect_after": "[{0}] Reconectar despues de 1 minuto",
+    "another_login": "[{0}] La Sesion se ha iniciado en otro dispositivo.",
+    "error_message": "```---ERROR REPORT---\\n\\nVersion : {0}\\nMessage : {1}\\nError   : {2}\\nJid     : {3}\\ncommand : {4}\\nPlatform : {5}```\\n\\n```-----``` *Made by LyFE with ❣* ```-----```",
+    "deleted_message": "MensajeBorrado",
+    "install_external_plugin": "[{0}] Instalando Plugins Externos...",
+    "installed_external_plugin": "[{0}] Plugins Externos Instalados.",
+    "plugin_install": "[{0}] Instalando Plugins...",
+    "plugin_installed": "[{0}] Instalado {1}",
+    "plugins_installed": "[{0}] Plugins Instalados",
+    "plugin_install_error": "[{0}] Error Instalando {1}, Borrando Plugin",
+    "plugin_not_found": "[{0}] Plugin {1} No Encontrado (404), Borrando Plugin",
+    "group_cmd": "Este Comando solo se puede utilizar en Grupos.",
+    "labels": {
+      "sudo": "SUDO",
+      "auto_read": "AUTO READ MSG",
+      "auto_status": "AUTO STATUS VIEW",
+      "auto_reject": "AUTO REJECT CALL",
+      "always_online": "ALWAYS ONLINE",
+      "anti_delete": "ANTI DELETE MSG",
+      "auto_update": "AUTO UPDATE BOT"
+    },
+    "promoted": "promoted",
+    "demoted": "demoted",
+    "file_size_error": "Size is {0}\n\n{1}",
+    "missing_jid": "missing jids",
+    "no_contacts": "not found contacts, please add contacts",
+    "reaction_not_enabled": "Reaction not enabled",
+    "reaction_not_allowed": "this reaction not allowed",
+    "metadata_fetch_failed": "failed to fetch metadata",
+    "lang_not_supported": "' {0} ' language not supported yet, switching to default language.",
+    "screenshot_error": "an error occured",
+    "id_missing": "id missing",
+    "not_on_whatsapp": "{0} is not on whatsapp.",
+    "yt_auth_required": "Error al descargar: YouTube requiere autenticación.\\n\\n*Soluciones:*\\n1. *Google Auth (Recomendado):* Usa `.gauth auth` para vincular tu cuenta de Google.\\n2. *YT_COOKIE:* Configura la variable de entorno `YT_COOKIE`.\\nGuía: https://github.com/lyfe00011/levanter/wiki/yt%E2%80%90cookie\\n\\n*Error:* {0}"
+  },
+  "plugins": {
+    "common": {
+      "reply_to_image": "Cita una Imagen.",
+      "update": "_Actualizado_"
+    },
+    "menu": {
+      "help": "```╭────────────────╮\n      ʟᴇᴠᴀɴᴛᴇʀ\n╰────────────────╯\n\n╭────────────────\n│ Prefijo : {0}\n│ Usuario : {1}\n│ Hora : {2}\n│ Dia : {3}\n│ Fecha : {4}\n│ Version : {5}\n│ Plugins : {6}\n│ RAM : {7}\n│ Encendido : {8}\n│ Plataforma : {9}\n╰────────────────```",
+      "menu": "```╭═══ LEVANTER ═══⊷\n┃❃╭──────────────\n┃❃│ Prefijo : {0}\n┃❃│ Usuario : {1}\n┃❃│ Hora : {2}\n┃❃│ Dia : {3}\n┃❃│ Fecha : {4}\n┃❃│ Version : {5}\n┃❃│ Plugins : {6}\n┃❃│ RAM : {7}\n┃❃│ Encendido : {8}\n┃❃│ Plataforma : {9}\n┃❃╰───────────────\n╰═════════════════⊷```",
+      "disabled": "disabled"
+    },
+    "afk": {
+      "example": "> *Como Usar AFK:*\n- Set AFK: *afk [razon]*\n- Ejemplo: *afk Estoy ocupado* Visto por ultima vez: #lastseen\n- Enviar un mensaje despues de haber Activado AFK lo desactivara Automaticamente.\n- Apagar AFK: *afk off*",
+      "not_afk": "Ya no estas AFK.",
+      "desc": "Modo AFK (Usuario Ocupado)"
+    },
+    "alive": {
+      "default": "Estoy Vivo\nTiempo de Encendido : #uptime",
+      "desc": "Muestra el tiempo de encendido del Bot, el mensaje se puede personalizar."
+    },
+    "antifake": {
+      "example": "*Estado Antifake:* {0}\n\n> *Ejemplo de Uso:*\n- *antifake list* - Ver la Lista Aplicada\n- *antifake !91,1* - !Permitir/Bloquear Nuevos usuarios por País.\n- *antifake on | off* - Activar/Desactivar antifake",
+      "desc": "Configurar la Prohibición de Países",
+      "not": "No hay Países en la Lista.",
+      "status": "Antifake está ahora *{0}*.",
+      "update": "> Antifake Actualizado\n*Permitido:* {0}\n*No Permitido:* {1}",
+      "allow_prompt": "*Por favor proporciona los códigos de país para permitir (modo lista blanca)*\n_Ejemplo: antifake allow 1,91_",
+      "disallow_prompt": "*Por favor proporciona los códigos de país para bloquear (modo lista negra)*\n_Ejemplo: antifake disallow 92,93_",
+      "remove_prompt": "*Por favor proporciona los códigos de país para eliminar*\n_Ejemplo: antifake remove 91_",
+      "mode_conflict_whitelist": "*⚠️ ¡No se pueden mezclar modos!*\n\n_Actualmente estás en Modo Lista Negra. Usa `antifake clear` primero para cambiar a Modo Lista Blanca._",
+      "mode_conflict_blacklist": "*⚠️ ¡No se pueden mezclar modos!*\n\n_Actualmente estás en Modo Lista Blanca. Usa `antifake clear` primero para cambiar a Modo Lista Negra._",
+      "whitelist_success": "*✅ Códigos de país permitidos (Modo Lista Blanca):*\n{0}\n\n_Estos códigos serán permitidos, todos los demás serán bloqueados._",
+      "blacklist_success": "*🚫 Códigos de país bloqueados (Modo Lista Negra):*\n{0}\n\n_Estos códigos serán bloqueados, todos los demás serán permitidos._",
+      "removed": "*Códigos de país eliminados:*\n{0}",
+      "cleared": "*🗑️ Lista Antifake limpiada y desactivada*",
+      "whitelist_mode": "🟢 Modo Lista Blanca (Solo Permitir)",
+      "blacklist_mode": "🔴 Modo Lista Negra (Solo Bloquear)",
+      "enabled": "activado",
+      "disabled": "desactivado"
+    },
+    "antilink": {
+      "desc": "Configurar el Borrado de Links",
+      "disable": "_Antilink ya esta Desactivado._",
+      "antilink_notset": "Antilink está configurado para bloquear todos los enlaces (no hay lista de URL establecida). Use 'antilink allow' o 'antilink disallow' para configurar URLs específicas.",
+      "status": "El Anti-enlace es ahora *{0}*.",
+      "info": "`> Estado del Anti-enlace: {0}\n*Enlaces Permitidos:* {1}\n *Acción:* {2}",
+      "action_invalid": "*La acción especificada no es válida.*",
+      "action_update": "La acción del Anti-enlace ha sido actualizada por: *{0}*",
+      "update": "> Anti-enlace Actualizado\n*Permitido:* {0}\n*No Permitido:* {1}",
+      "enabled": "activado",
+      "disabled": "desactivado",
+      "example": "Estado del Anti-enlace: *{0}*\n\n> Ejemplos de Uso:\n- antilink list - Ver la configuración actual\n- antilink allow whatsapp.com - Permitir solo este enlace\n- antilink disallow facebook.com - No permitir este enlace\n- antilink clear allow - Borrar URLs permitidas\n- antilink clear disallow - Borrar URLs no permitidas\n- antilink on | off - Activar/Desactivar anti-enlace\n- antilink kick | warn | null - Acción a aplicar",
+      "allow_prompt": "*Please provide a URL to allow.*",
+      "no_new_urls": "*No new URLs to add.* All URLs already exist in the list.",
+      "urls_updated": "*Allowed URLs updated*\n\nAdded: {0}\nTotal: {1} URL(s)\n\n_Note: URLs are case-insensitive_",
+      "disallow_prompt": "*Please provide a URL to disallow.*",
+      "no_disallowed_urls": "*No new URLs to disallow.* All URLs are already disallowed.",
+      "disallowed_updated": "*Disallowed URLs updated*\n\nAdded to blocklist: {0}\nTotal blocked: {1} URL(s)\n\n_Note: URLs are case-insensitive_",
+      "settings_cleared": "*Antilink settings cleared.*",
+      "allowed_cleared": "*Allowed URLs cleared.*",
+      "disallowed_cleared": "*Disallowed URLs cleared.*"
+    },
+    "antiword": {
+      "desc": "Borrar palabras Prohibidas",
+      "example": "`AntiWord Status: {0}\n> *Ejemplos de Uso:*\n- antiword action/<kick | warn | null>* - Accion a Tomar cuando se detecte la palabra\n- antiword on | off - Activar/Desactivar El Bloqueo de Palabras\n- `setvar` ANTIWORDS:palabra1,palabra2,... - Define palabras a Bloquear",
+      "action_update": "La Accion del antiword ha sido Actualizada para: *{0}*",
+      "status": "AntiWord is now *{0}*.",
+      "add_prompt": "*Por favor proporciona palabras para agregar.*",
+      "added": "*Palabras agregadas:*\n{0}",
+      "remove_prompt": "*Por favor proporciona palabras para eliminar.*",
+      "removed": "*Palabras eliminadas:*\n{0}",
+      "activated": "activado",
+      "deactivated": "desactivado",
+      "no_words": "*No hay palabras configuradas.*",
+      "info": "*Estado AntiWord:* {0}\n*Acción:* {1}\n\n*Palabras:* {2}",
+      "cleared": "*Lista AntiWord limpiada.*"
+    },
+    "apk": {
+      "desc": "Descarga APK de APKMirror",
+      "example": "> *Ejemplo de Uso:*\n- apk Mixplorer\n- apk whatsapp,apkm (Esto incluira APKS Divididas)",
+      "no_result": "_No hay Resultados para tu Busqueda._",
+      "apps_list": "Apps Encontradas ({0})"
+    },
+    "delete": {
+      "desc": "AntiBorrado: Recupera Mensajes Borrados ",
+      "example": "> *Ejemplo de Uso:*\n- delete p - Enviar mensajes borrados a /sudo\n- delete g - Envia mensajes borrados a Grupo\n- delete off - Desactivar AntiBorrado\n- delete <jid> - Enviar los Mensajes borrados al JID Especificado",
+      "invalid_jid": "*Error:* _El JID no es Valido_",
+      "dlt_msg_jid": " _Los mensajes borrados seran Reenviados a: {0}_",
+      "dlt_msg_disable": "AntiBorrar ha sido desactivado.",
+      "dlt_msg_sudo": "_Los mensajes eliminados se enviaran a tu chat o sudo._",
+      "dlt_msg_chat": "_Los mensajes eliminados se enviaran al mismo Chat._"
+    },
+    "dlt": {
+      "desc": "Borra mensajes Citados"
+    },
+    "fb": {
+      "desc": "Descarga Facebook video",
+      "example": "",
+      "quality": "Elige la Calidad del Video",
+      "invalid": "*Error:* _No se ha encontrado Videos en el Link._"
+    },
+    "fancy": {
+      "desc": "Crea un texto elegante a partir del texto.",
+      "example": "> *Como Usar:*\nfancy <text>\nfancy <numero de fuente> (citando mensaje)\n\n*Ejemplo:*\n- fancy Hola\n- fancy 7 (mientras cita el mensaje)",
+      "invalid": "*Numero de fuente Invalido!*\nPor favor, introduzca un numero entre *1-47*."
+    },
+    "stop": {
+      "desc": "Detiene las respuestas Automaticas a Palabras",
+      "example": "> *Como Usar:*\n- stop <filter>\n- stop hola",
+      "delete": "{0} Borrado.",
+      "not_found": "_{0} No esta en la Lista._"
+    },
+    "filter": {
+      "desc": "Respuestas Automaticas a Palabras en Grupo",
+      "example": "> *Ejemplo:*\n- filter hola (citando un mensaje)\n- filter list (muestra lista de palabras)",
+      "list": "> *Palabras Actuales:*\n{0}",
+      "filter_add": "✅ *{0}* Palabra Agregada"
+    },
+    "forward": {
+      "desc": "Reenvia el mensaje citado a JID(s)",
+      "foward": "✅ Mensaje Reenviado a: {0}",
+      "example": "JID Invalido!\n> *Como Usar:*\n- forward <jid>\n- forward 1234567890@s.whatsapp.net"
+    },
+    "save": {
+      "desc": "Reenvia el Mensaje citado a Mi Chat",
+      "save": "✅ Mensaje Guardado!"
+    },
+    "gemini": {
+      "desc": "Google Gemini AI - Pregunta lo que Sea!",
+      "example": "> *Ejemplo :*\n- gemini hola\n- Gemini explicame esta imagen (citando una imagen)",
+      "Key": "> Para usar Gemini debes añadir tu API Key!\nCopia tu ApiKey de Aqui: https://aistudio.google.com/app/apikey\n\n*Agregalo al bot con:*\nsetvar GEMINI_API_KEY = TuApiKey"
+    },
+    "gstop": {
+      "desc": "Detiene las respuestas Automaticas a Palabras en TODOS los grupos",
+      "example": "> *Como Usar:*\n- gstop <filter>\n- gstop Hola",
+      "delete": "{0} Borrado",
+      "not_found": "_{0} no encontrado en la lista._"
+    },
+    "pstop": {
+      "desc": "Detiene las respuestas Automaticas a Palabras en TODOS los privados",
+      "example": "> *Como Usar:*\n- pstop <filter>\n- pstop Hola",
+      "delete": "🗑 {0} Borrado",
+      "not_found": "_{0} no encontrado en la lista._"
+    },
+    "gfilter": {
+      "desc": "Respuestas Automaticas a Palabras en Grupos",
+      "example": "> *Ejemplo :*\n- `gfilter` Hola (while replying to a text message)\n- `gfilter list` (Muestra Lista Actual gfilters)",
+      "add": "*{0}* gfilter Añadido"
+    },
+    "pfilter": {
+      "desc": "Respuestas Automaticas a Palabras en TODOS los privados",
+      "example": "> *Ejemplo :*\n- `pfilter` Hola (while replying to a text message)\n- `pfilter list` (Muestra Lista Actual pfilters)",
+      "add": "*{0}* pfilter Añadido"
+    },
+    "gpp": {
+      "desc": "Cambia el Icono del grupo",
+      "update": "✅ _El Icono de grupo ha sido actualizado_"
+    },
+    "greet": {
+      "setdesc": "Ajusta el Mensaje Saludo al PriVado",
+      "setexample": "> *Ejemplo:* setgreet Hola, Soy un Bot.",
+      "setupdate": "✅ _Saludo Actualizado._",
+      "getdesc": "Mostrar mensaje de saludo actual",
+      "notsetgreet": "> No se ha establecido ningún mensaje de saludo.",
+      "deldesc": "Eliminar el mensaje de saludo (mensaje privado de 1 vez)",
+      "delupdate": "🗑 El Saludo (mensaje privado de 1 vez) ha sido eliminado."
+    },
+    "greetings": {
+      "welcome_desc": "Enviar un mensaje de bienvenida a nuevos miembros",
+      "welcome_example": "El mensaje de bienvenida está actualmente *{0}*\n\n> *Ejemplos de Uso:*\n- welcome ¡Hola &mention! Bienvenido a &name - Establecer mensaje\n- welcome on | off - Activar/Desactivar\n- welcome delete - Eliminar mensaje\n\n> *Marcadores:*\n- &mention - Mencionar nuevo miembro\n- &name - Nombre del grupo\n- &desc - Descripción del grupo\n- &size - Cantidad de miembros\n- &pp - Foto de perfil del miembro\n\n> *Multimedia:* Responde a imagen/video O incluye URL en mensaje\n\nPara más detalles: https://levanter.site/",
+      "welcome_enable": "_Bienvenida activada_",
+      "welcome_disable": "_Bienvenida desactivada_",
+      "welcome_delete": "_Mensaje de bienvenida eliminado_",
+      "welcome_not_set": "_¡Por favor establece un mensaje de bienvenida primero!_\n\n> *Ejemplo:*\nwelcome ¡Hola &mention! Bienvenido a &name\n\nLuego usa: welcome on",
+      "goodbye_desc": "Enviar un mensaje de despedida a los miembros",
+      "goodbye_example": "El mensaje de despedida está actualmente *{0}*\n\n> *Ejemplos de Uso:*\n- goodbye ¡Adiós &mention! Hasta luego - Establecer mensaje\n- goodbye on | off - Activar/Desactivar\n- goodbye delete - Eliminar mensaje\n\n> *Marcadores:*\n- &mention - Mencionar miembro que se va\n- &name - Nombre del grupo\n- &desc - Descripción del grupo\n- &size - Cantidad de miembros\n- &pp - Foto de perfil del miembro\n\n> *Multimedia:* Responde a imagen/video O incluye URL en mensaje\n\nPara más detalles: https://levanter.site/",
+      "goodbye_enable": "_Despedida activada_",
+      "goodbye_disable": "_Despedida desactivada_",
+      "goodbye_delete": "_Mensaje de despedida eliminado_",
+      "goodbye_not_set": "_¡Por favor establece un mensaje de despedida primero!_\n\n> *Ejemplo:*\ngoodbye ¡Adiós &mention! Gracias por estar con nosotros\n\nLuego usa: goodbye on"
+    },
+    "groq": {
+      "example": "*Ejemplo:* groq Hola\n\nDebes Agregar ApiKey, Opcionalmente puedes ajustar las demas Variables:\n- GROQ_API_KEY\n- GROQ_MODEL\n- GROQ_SYSTEM_MSG\n\n Para mas detalles ve a https://console.groq.com/keys",
+      "desc": "Pregunta a GROQ AI"
+    },
+    "kick": {
+      "desc": "Elimina miembros del grupo",
+      "not_admin": "No soy Administrador :c",
+      "mention_user": "Menciona o cita la persona a Eliminar",
+      "admin": "Este usuario es un Administrador, no puedo Eliminarlo.",
+      "kicking_all": "⚠️ELIMINANDO GRUPO... Se Eliminaran {0} Personas. Para Detener esto REINICIA EL BOT `.reboot`⚠️."
+    },
+    "add": {
+      "desc": "Añade miembros al Grupo",
+      "warning": "> Agrega solo a personas a las que te tengan Agendado o tu numero sera BANEADO.",
+      "not_admin": "No soy Admin, no puedo Añadir :c",
+      "invalid_number": "Cita o Menciona un Numero correcto para Añadir. Ejemplo: add 91987654321",
+      "failed": "No se Pudo Agregar. Se le ha enviado una Invitacion"
+    },
+    "promote": {
+      "desc": "Promueve un Usuario a Administrador",
+      "not_admin": "No soy Admin para poder hacer esta Accion :c",
+      "mention_user": "Menciona o Cita a Quien quieres Volver Administrador",
+      "already_admin": "Esta persona ya es Administrador."
+    },
+    "demote": {
+      "desc": "Remueve el Administrador a Alguien",
+      "not_admin": "No soy Admin para poder hacer esta Accion :c",
+      "mention_user": "Menciona o Cita a Quien quieres Degradar.",
+      "not_admin_user": "Esta persona no es Administrador"
+    },
+    "invite": {
+      "desc": "Recibe el enlace del Grupo",
+      "not_admin": "No soy Admin, no puedo generar el enlace :c",
+      "success": "Aqui Tienes el Enlace al Grupo:\n{0}"
+    },
+    "mute": {
+      "desc": "Activar SoloAdmins en el Grupo",
+      "not_admin": "No soy Admin para poder Mutear el Chat :c",
+      "mute": "El grupo ha sido Silenciado por {0} minutos."
+    },
+    "unmute": {
+      "desc": "Desactivar SoloAdmins en el Grupo",
+      "not_admin": "No soy Admin para poder desmutear el Chat :c"
+    },
+    "join": {
+      "desc": "Unir el bot a un Grupo desde Enlace",
+      "invalid_link": "Envia un enlace de union Valido.",
+      "group_full": "El grupo esta lleno, no me puedo unir.",
+      "success": "Unido al Grupo Exitosamente.",
+      "request_sent": "Solicitud de Union Enviada."
+    },
+    "revoke": {
+      "desc": "Revocar enlace de Invitacion",
+      "not_admin": "No soy Administrador, no puedo Revocar el Enlace."
+    },
+    "group_info": {
+      "desc": "Muestra Informacion del Grupo desde su Enlace",
+      "invalid_link": "El Enlace a Grupo no parece ser Valido.",
+      "details": "*Nombre:* {0}\n*ID:* {1}@g.us\n*Dueño:* {2}\n*Miembros:* {3}\n*Creado:* {4}\n*Descripcion:* {5}"
+    },
+    "common_members": {
+      "desc": "Show or kick common memebers in two or more groups",
+      "found": "Found 0 common members.",
+      "common_usage": "*Example*\ncommon jid\ncommon jid kick\ncommon jid1 jid2\ncommon jid1,jid2 kick\ncommon jid1 jid2 jid3...jid999\n\ncommon jid1 jid2 jid3 any\nkick - to remove only group u command\nkickall - to remove from all jids\nany - to include two or more common group members\nskip - to avoid removing from all, example skip to avoid from one group or skip jid1,jid2,jid3 to skip from.",
+      "ginfo_usage": "*Example : info group_invte_link*"
+    },
+    "insta": {
+      "usage": "Ejemplo: `.insta` <Instagram URL>",
+      "not_found": "No se ha encontrado..",
+      "desc": "Descarga Instagram posts, reels, y videos."
+    },
+    "ison": {
+      "usage": "Ejemplo: ison <phone number>",
+      "not_exist": "`*No Existe en Whatsapp* ({0})\n`",
+      "exist": "\n*Exist en Whatsapp* ({0})\n",
+      "privacy": "*Privacidad Activada* ({0})\n",
+      "desc": "Comprueba si existen Numeros Registrados en WhatsApp."
+    },
+    "lydia": {
+      "usage": "Como Utilizar:lydia on | off\nCita o menciona para activar en un usuario específico.",
+      "activated": "Lydia se ha Activado.",
+      "deactivated": "Lydia se ha Desactivado.",
+      "note": "Solo responde a un mensaje Citado.",
+      "desc": "Configura Chatbot."
+    },
+    "rotate": {
+      "usage": "Ejemplo: rotate right|left|flip (Citando un Video).",
+      "not_found": "Responda a un video y especifique la rotacion (right, left, or flip).",
+      "desc": "Girar un vídeo hacia la derecha, izquierda o voltearlo.",
+      "convert": "_Converting..._"
+    },
+    "mp3": {
+      "usage": "Cita un Video para Convertirlo en MP3.",
+      "not_found": "Cita un Video o Audio para Convertir a Nota de Voz.",
+      "desc": "Cita un Video para Convertirlo en Nota de Voz."
+    },
+    "photo": {
+      "usage": "Cita un Sticker para convertirlo en Foto Normal.",
+      "desc": "Convierte el Sticker en Foto Normal."
+    },
+    "reverse": {
+      "usage": "Cita un Audio/Video para ponerlo en Reversa.",
+      "not_found": "Cita un Archivo de Audio/Video.",
+      "desc": "Poner en Reversa un Audio/Video."
+    },
+    "cut": {
+      "usage": "Ejemplo: cut 0;30 (Inicio;Duracion) (Cita Audio/Video).",
+      "not_found": "Cita un video o audio con valores de inicio y duracion (Ejemplo:, 10;30).",
+      "desc": "Recortar un archivo de audio o vídeo."
+    },
+    "trim": {
+      "usage": "Ejemplo: trim 10;30 (Citando un Video).",
+      "not_found": "Cita un video con valor de inicio y duracion (Ejemplo:, 60;30).",
+      "desc": "Recortar un vídeo con tiempo de inicio y duración especificados."
+    },
+    "page": {
+      "usage": "Ejemplo: page 1 (Cita una Imagen).",
+      "not_found": "Cita una Imagen con el Numero de Pagina que sera en el PDF.",
+      "desc": "Agrega una imagen como página a un PDF.",
+      "add": "Pagina {0} Añadida al PDF!"
+    },
+    "pdf": {
+      "usage": "Ejemplo: pdf note (Agrega nombre al PDF).",
+      "not_found": "Añade un Nombre para PDF.",
+      "desc": "Convierte las imagenes Encoladas con `page` a PDF."
+    },
+    "merge": {
+      "usage": "Ejemplo: merge 1 (cita el video con el numero de ubicacion de video).",
+      "not_found": "Cita un video añadiendo orden del video en numeros.",
+      "desc": "Une varios Videos en 1.",
+      "merge": "_Uniendo {0} videos_",
+      "add": "_Video {0} Agregado_"
+    },
+    "compress": {
+      "usage": "Cita un video para Reducir su Tamaño.",
+      "desc": "Cita un video para Reducir su Tamaño."
+    },
+    "bass": {
+      "usage": "Ejemplo: bass 10 (Cita Audio/Video).",
+      "desc": "Aumenta el BASS del Audio"
+    },
+    "treble": {
+      "usage": "Ejemplo: treble 10 (Cita Audio/Video).",
+      "desc": "Aumenta agudos de un archivo de audio."
+    },
+    "histo": {
+      "usage": "Cita Audio/Video para generar un histogram.",
+      "desc": "Convierte el audio a una representacion visual histogram."
+    },
+    "vector": {
+      "usage": "Cita Audio/Video para crear una visualizacion vector.",
+      "desc": "Convierte un Audio en una visualizacion vector"
+    },
+    "crop": {
+      "usage": "Ejemplo: crop 512,512,0,512 (Citando Video).",
+      "not_found": "Cita un Video agregando cortes validos, deben estar en este formato: out_w,out_h,x,y. crop 512,512,0,512 ",
+      "desc": "Recortar un vídeo con dimensiones especificadas.",
+      "xcrop": "Anchura de Video: *{0}*, altura: *{1}*\nElija un tamaño de salida intermedio."
+    },
+    "low": {
+      "usage": "Cita Audio/Video para bajar el tono.",
+      "desc": "Baja el Tono del Audio."
+    },
+    "pitch": {
+      "usage": "Cita Audio/Video para Cambiar el tono de Audio.",
+      "not_found": "Cita un Audio/Video.",
+      "desc": "Ajusta el tono en un Audio."
+    },
+    "avec": {
+      "usage": "Cita Audio Para convertirlo a vídeo.",
+      "not_found": "Cita un Audio.",
+      "desc": "Convierte un audio en vídeo."
+    },
+    "avm": {
+      "usage": "Responde con `avm` a un Video y Luego a un Audio para Agregar el Audio al Video. Fusion Multimedia al enviar `avm` solo despues de agregar la multimedia.",
+      "desc": "Fusiona audio y video en uno solo.",
+      "audio_add": "_Se ha agregado el Audio a la lista!_",
+      "video_add": "_Se ha agregado el Video a la lista!_"
+    },
+    "black": {
+      "usage": "Cita un audio para generar un video con fondo negro.",
+      "desc": "Convierte el audio en un vídeo en negro."
+    },
+    "mediafire": {
+      "usage": "Ejemplo: mediafire <Mediafire URL>",
+      "not_found": "Archivo no encontrado, verifica el enlace.",
+      "desc": "Descarga el archivo de Mediafire."
+    },
+    "mention": {
+      "usage": "Ejemplo: mention on | off | get\n(Reply to a message to target a specific user.)",
+      "desc": "Configurar la función de mención para responder automaticamente cuando mencionan al bot.",
+      "not_activated": "Responder a Mencion no esta Activado",
+      "current_status": "La mencion es {0}. Para mas detalles visita: https://levanter.site/",
+      "activated": "Responder a Mencion ha sido Activado.",
+      "deactivated": "Responder a Mencion ha sido Desactivado.",
+      "updated": "Preferencias de Mencion Actualizados."
+    },
+    "status": {
+      "usage": "Como Utilizar: `status` on | off | no-dl | except-view <jid,...> | only-view <jid,...>",
+      "desc": "Gestion de Estados de WhatsApp."
+    },
+    "call": {
+      "usage": "Como Utilizar:call on | off",
+      "desc": "Bloquea Recibir Llamadas."
+    },
+    "read": {
+      "usage": "Como Utilizar:read on | off",
+      "desc": "Activar visto por el Bot."
+    },
+    "online": {
+      "usage": "Como Utilizar:online on | off",
+      "desc": "Ajustes de Mostrar Siempre Online."
+    },
+    "movie": {
+      "usage": "Ejemplo: movie <movie Titulo>",
+      "not_found": "Película no encontrada. Verifique el título y vuelva a intentarlo.",
+      "desc": "Obtenga información detallada de la película, incluida la trama completa. Utiliza la API de OMDB."
+    },
+    "msgs": {
+      "desc": "Muestra la cantidad de mensajes enviados por cada cada miembro, tipo de mensaje, ultimo mensaje, ultima vez visto, etc.",
+      "msg_init": "\n*Numero :* {0}\n*Nombre :* {1}\n*Total Msgs :* {2}\n",
+      "msg_last": "*VistoHace :* {0} \n",
+      "no_activity": "No activity recorded yet."
+    },
+    "reset": {
+      "usage": "Ejemplo: `reset all` O `reset` <cita o mencion>",
+      "desc": "Resetear estadisticas de Mensajes de Usuarios.",
+      "reset_all": "El Contador ha sido Reseteado",
+      "reset_one": "✅ _@{0} Contador Reseteado._"
+    },
+    "inactive": {
+      "usage": "> Ejemplo:\n-inactive day 10\n- inactive day 10 kick\n- inactive total 100\n- inactive total 100 kick\n- inactive day 7 total 150\n- inactive day 7 total 150 kick\n\nif kick not mentioned, Just list",
+      "desc": "Identifica y Remueve Participantes inactivos del Grupo.",
+      "inactives": "_Total de Inactivos : {0}_",
+      "removing": "⚠️_Eliminando a {0} Miembros Inactivos en 7 seconds_⚠️"
+    },
+    "weather": {
+      "desc": "weather info",
+      "usage": "*Example : weather delhi*",
+      "not_found": "_{0} not found_",
+      "report": "*Name :* {0}\n*Country :* {1}\n*Weather :* {2}\n*Temp :* {3}°\n*Feels Like :* {4}°\n*Humidity :* {5}%\n*Visibility  :* {6}m\n*Wind* : {7}m/s {8}\n*Sunrise :* {9}\n*Sunset :* {10}"
+    },
+    "y2mate": {
+      "ytv_desc": "Download YouTube video",
+      "ytv_usage": "_Example: ytv url_",
+      "yta_desc": "Download YouTube audio",
+      "yta_usage": "_Example: yta darari/yt url_",
+      "invalid_link": "*Provide a valid YouTube link!*",
+      "no_video": "*No video found*",
+      "no_audio": "_Audio not found._"
+    },
+    "amute": {
+      "usage": "Como Utilizar:amute <hour> <min>\n- amute on | off\n- amute info\n\nCita texto que sera el mensaje Enviado al Activarse.",
+      "desc": "Programe el silencio automático del grupo a una hora específica con un mensaje personalizado opcional.",
+      "not_found": "Configuración de AutoMute no encontrada.",
+      "already_disabled": "AutoMute actualmente desactivado.",
+      "enabled": "✅ AutoMute Activado.",
+      "disabled": "📴 AutoMute Desactivado.",
+      "invalid_format": "> Ejemplo:\n- amute 6 0\n- amute on | off\n- amute info\n\nCita texto que sera el mensaje Enviado al Activarse.",
+      "scheduled": "El grupo se silenciará en {0}\n*Mensaje :* {1}",
+      "info": "Hora: {0}\nMinuto: {1}\nFecha: {2}\nMute: {3}\nMensaje: {4}"
+    },
+    "aunmute": {
+      "usage": "Como Utilizar:aunmute <hour> <min>\n- aunmute on | off\n- aunmute info\nReply with text to set an unmute message",
+      "desc": "Programe la activación del grupo a una hora específica con un mensaje personalizado opcional.",
+      "not_found": "Configuración de AutoUnMute no encontrada.",
+      "already_disabled": "AutoUnMute actualmente desactivado.",
+      "enabled": "✅ AutoUnMute Activado.",
+      "disabled": "📴 AutoUnMute Desactivado.",
+      "invalid_format": "> Ejemplo:\n- aunmute 16 30\n- aunmute on | off\n- aunmute info\n\nReply with text to set an unmute message.",
+      "scheduled": "Group will unmute at {0}\n*message :* {1}",
+      "info": "Hora: {0}\nMinuto: {1}\nFecha: {2}\nMute: {3}\nMensaje: {4}"
+    },
+    "zushi": {
+      "usage": "> Ejemplo:\n- zushi ping, sticker\n- Para configurar todos los comandos, escriba `list` y luego responda con el mensaje copiado (Ejemplo:, zushi mensaje copiado).",
+      "desc": "Le permite habilitar comandos para que otros los utilicen en el chat..",
+      "already_set": "{0} ya esta Permitido.",
+      "allowed": "*Estos son los Comandos Permitidos para:* @{0}\n{1}",
+      "no_input": "⚠️ Por favor proporciona nombres de comandos\n\n📝 Ejemplos:\n  • .zushi song video sticker\n  • .zushi img trt translate\n\n💡 Agrega múltiples comandos separados por espacios",
+      "duplicates": "❌ Comandos ya permitidos: {0}\n\n📋 Comandos permitidos actualmente ({1} total):\n{2}\n\n💡 Usa .yami para ver todos los comandos permitidos\n💡 Usa .ope para eliminar comandos",
+      "invalid": "⚠️ No se encontraron comandos válidos\n\nOmitidos inválidos: {0}\n\n💡 Usa .help para ver los comandos disponibles",
+      "error": "❌ Error: {0}",
+      "success": "✅ Se agregaron exitosamente {0} comando{1}:\n{2}\n\n📊 Total permitido: {0} comando{1} para @{3}\n\n💡 Los usuarios ahora pueden usar estos comandos"
+    },
+    "yami": {
+      "usage": "Simplemente envia: `yami`",
+      "desc": "Muestra lista de comandos permitidos en el chat..",
+      "not_set": "Aún no se han permitido comandos.",
+      "no_commands": "📋 No se encontraron comandos permitidos\n\n💡 Usa .zushi para agregar comandos\n📝 Ejemplo: .zushi song video sticker",
+      "list": "📋 Comandos permitidos para @{0}:\n\n{1}\n\n📊 Total: {2} comando{3}\n\n💡 Eliminar con: .ope <nombres de comandos>\n💡 Eliminar todo: .ope all"
+    },
+    "ope": {
+      "usage": "Ejemplo: `ope ping, sticker` O `ope all`",
+      "desc": "Revoca comandos permitidos a Grupos o Usuarios.",
+      "not_found": "No se encontraron comandos permitidos para {0}.",
+      "all_removed": "Se han eliminado todos los comandos permitidos.",
+      "removed": "*Se han removido estos comandos Para:* @{0}\n{1}",
+      "no_input": "⚠️ Por favor proporciona nombres de comandos para eliminar\n\n📝 Ejemplos:\n  • .ope song video\n  • .ope all (elimina todo)\n\n💡 Usa .yami para ver los comandos permitidos",
+      "not_found_list": "❌ Comando{0} no encontrado{0}: {1}{2}\n\n💡 Usa .yami para ver todos los comandos permitidos\n📝 Ejemplo: .ope song video",
+      "error": "❌ Error: {0}",
+      "no_commands": "⚠️ No se encontraron comandos para este usuario/grupo\n\n💡 Usa .zushi para agregar comandos primero",
+      "all_success": "✅ Todos los comandos eliminados\n\n💡 Usa .zushi para agregar nuevos comandos",
+      "success": "✅ Eliminados {0} comando{1}:\n{2}\n\n📊 Para: @{3}\n\n💡 Usa .yami para ver los comandos restantes\n💡 Usa .ope all para eliminar todo"
+    },
+    "pdm": {
+      "usage": "Como Utilizar: `pdm` on | off",
+      "desc": "Activa Notificaciones sobre quien es Degradadado o Promovido a Administrador en el Grupo.",
+      "not_found": "specify 'on' or 'off'. For Ejemplo: pdm on",
+      "activated": "✅ Promote/demote Alerta Activada.",
+      "deactivated": "📴 Promote/demote Alerta Desactivada."
+    },
+    "ping": {
+      "desc": "Comprueba el tiempo de Respuesta del Bot (latencia).",
+      "ping_sent": "Ping!",
+      "pong": "Pong! Tiempo de Respuesta: {0} ms"
+    },
+    "pinterest": {
+      "usage": "Ejemplo: `pinterest` <Pinterest URL>",
+      "not_found": "No se ha encontrado Multimedia, Prueba de Nuevo.",
+      "desc": "Descarga Multimedia de Pinterest."
+    },
+    "plugin": {
+      "usage": "> Ejemplo:\n- `plugin` <Gist URL>\n- `plugin list`",
+      "desc": "Instala Plugins externos desde un link Gist que contenga el codigo del Plugin o enumere todos los Plugins instalados.",
+      "invalid": "Proporcione un link Gist con Codigo Valido o un nombre de Plugin.",
+      "not_installed": "No hay ningún Plugin Externo instalado actualmente.",
+      "installed": "Se han Instalado estos Nuevos Comandos: {0}"
+    },
+    "remove": {
+      "usage": "> Ejemplo:\b- `remove` <NombrePlugin>\n- `remove all`",
+      "desc": "Elimina Plugins externos especificando el nombre o elimina todos los complementos instalados.",
+      "not_found": "Plugin *{0}* No encontrado.",
+      "removed": "✅ Plugins Eliminados ."
+    },
+    "reboot": {
+      "desc": "Reinicia la instancia PM2 del Bot.",
+      "starting": "Reiniciando..."
+    },
+    "fullpp": {
+      "usage": "Ejemplo: `fullpp` (Citando una Imagen)",
+      "desc": "Cambia la foto de perfil con Tamaño Total.",
+      "updated": "Imagen de Perfil Actualizada."
+    },
+    "jid": {
+      "desc": "Muestra el JID de un usuario o chat. Busca un usuario mencionado, un mensaje de respuesta o, de forma predeterminada, el JID del chat actual."
+    },
+    "left": {
+      "desc": "Abandona el grupo actual. Si se agrega texto adicional, se enviara antes de abandonar el grupo."
+    },
+    "block": {
+      "usage": "Ejemplo: block (Citando o Mencionando)",
+      "desc": "Agrega a lista de Bloqueo a una Persona.",
+      "status": "Ha sido Bloqueado."
+    },
+    "unblock": {
+      "usage": "Ejemplo: unblock (Citando o Mencionand)",
+      "desc": "Elimina de la lista de Bloqueo a una Persona.",
+      "status": "_Desbloqueado_"
+    },
+    "pp": {
+      "usage": "Ejemplo: pp (Cita una Imagen)",
+      "desc": "Actualiza tu foto de perfil con imagen citada."
+    },
+    "whois": {
+      "number": "*Numero :* {0}",
+      "name": "*Nombre :* {0}",
+      "about": "*Info :* {0}",
+      "setAt": "*Establecido :* {0}",
+      "owner": "*Dueño :* {0}",
+      "members": "*Miembros* : {0}",
+      "description": "*Desc* : {0}",
+      "created": "*Creado* : {0}",
+      "usage": "Ejemplo: whois <jid o identificador de usuario>",
+      "desc": "Muestra la foto de perfil e información adicional (Ejemplo:, acerca de, estado) de un usuario o grupo."
+    },
+    "gjid": {
+      "desc": "Enumera todos los Grupos JID con sus nombres.",
+      "item": "*{0}. {1}*\n{2}\n"
+    },
+    "qr": {
+      "usage": "Ejemplo: `qr` mensaje o link o citando a una imagen `qr` para ver el contenido del QR",
+      "desc": "Generar un QR a partir del texto o decodificar un QR a partir de una imagen citada."
+    },
+    "reddit": {
+      "usage": "Ejemplo: `reddit` <URL>",
+      "desc": "Descarga multimedia de Reddit.",
+      "error": "No se ha encontrado Videos en el Link."
+    },
+    "rmbg": {
+      "usage": "Ejemplo: rmbg (Cita una Imagen)",
+      "desc": "Elimina el fondo de la imagen citada con remove.bg",
+      "key": "Para usar este comando debes tener una cuenta en remove.bg, y agregar tu APIKey al bot usando `.setvar` RMBG_KEY:<TuAPIkeyAqui> (Ejemplo:, `setvar` RMBG_KEY:GWQ6jVy9MBpfYF9SnyG8jz8P). REGISTRARSE: https://accounts.kaleido.ai/users/sign_up | API KEY: https://www.remove.bg/dashboard#api-key",
+      "error": "Falta la clave API. Configure su clave API y Cita una Imagen."
+    },
+    "setschedule": {
+      "usage": "> *Ejemplo :*\n- `setschedule` jid,minuto-hora-dia-mes (en formato de 24 horas, día y mes opcionales)\n- `setschedule` 91987654321@s.whatsapp.net, 9-9-13-8\n- `setschedule` 91987654321@s.whatsapp.net, 0-10 (enviar mensaje diariamente a las 10 am)\n- `setschedule` 91987654321@s.whatsapp.net, 0-10, once (enviar mensaje a las 10 am, una vez)",
+      "desc": "Programar el envío de un mensaje en un chat y fecha específico. ",
+      "invalid": "Formato o horario Invalido. Siga uno de los ejemplos.",
+      "no_reply": "Cita el mensaje a programar el envio.",
+      "scheduled": "_Programado exitosamente para enviar a las_ *{0}* _en_ @{1}."
+    },
+    "getschedule": {
+      "desc": "Listar mensajes programados para el chat especificado.",
+      "not_found": "No hay mensajes programados.",
+      "time": "Hora : {0}"
+    },
+    "delschedule": {
+      "usage": "> Ejemplo:\n- `delschedule` 9198765431@s.whatsapp.net, 8-8-10-10\n- `delschedule` 9198765431@s.whatsapp.net\n- `delschedule` all",
+      "desc": "Eliminar un mensaje programado especificando el JID de destino y la hora, o elimina todos los mensajes programados de una vez.",
+      "invalid": "Formato o horario Invalido. Siga uno de los ejemplos.",
+      "not_found": "Mensaje Automatico no Encontrado.",
+      "deleted": "_Mensaje Automatico Eliminado_"
+    },
+    "setstatus": {
+      "usage": "Ejemplo: setstatus jid,jid,jid,... O setstatus contact",
+      "desc": "Sube un estado para contactos especificos o para contactos importados. Cita un mensaje para subirlo como Estado de WhatsApp.",
+      "reply_required": "Cita un mensaje para subir como Estado de WhatsApp",
+      "sent": "_El estado se ha enviado a {0} contactos._"
+    },
+    "scstatus": {
+      "usage": "Ejemplo:\n- scstatus jid,jid,jid,...|minuto-hora-dia-mes (dia y meses opcionales)\n- scstatus contact|minuto-hora-dia-mes\n- scstatus delete all|minuto-hora-dia-mes\n- scstatus list",
+      "desc": "Programa un estado de WhatsApp para que se envíe a una hora específica. Utiliza `contact` para contactos importados o proporcione JIDs específicos.",
+      "reply_required": "Cita un mensaje para programar la subida de Estado automatico.",
+      "invalid": "Formato Invalido. Siga uno de los ejemplos..",
+      "scheduled": "✅ _Programado exitosamente para enviar a las_ {0}.",
+      "list": "Lista de estados programados:",
+      "deleted": "🗑 Estado programado borrado."
+    },
+    "antispam": {
+      "desc": "Administra la protección antispam con límites configurables",
+      "usage": "Use: antispam <on/off/low/medium/high/warn/delete/kick/info>",
+      "disabled_status": "📊 *Estado de Antispam*\n\n🔴 Desactivado\n\nUsa `antispam on` para activar la protección",
+      "info_status": "📊 *Estado de Antispam*\n\n{status}\nNivel: {level}\nAcción: {action}\n\n*Umbrales de Detección:*\n• Límite de puntuación: {score} pts\n• Límite de mensajes: {messages} msgs\n• Ventana de tiempo: {time}s\n• Penalización por repetición: {penalty}x",
+      "deactivated": "⚠️ *Protección Antispam Desactivada*\n\nLa detección de spam está ahora APAGADA",
+      "activated": "✅ *Protección Antispam Activada*\n\nNivel: {level} ({description})\nAcción: {action}\n\n*Umbrales:*\n• Puntuación: {score} pts\n• Mensajes: {messages} msgs\n• Tiempo: {time}s",
+      "level_set": "✅ *Nivel Cambiado*\n\nNuevo nivel: {level}\n\n*Umbrales:*\n• Puntuación: {score} pts\n• Mensajes: {messages} msgs\n• Tiempo: {time}s\n• Penalización: {penalty}x",
+      "action_set": "✅ *Acción Cambiada*\n\nLos spammers serán: {action_desc}\n\n*Configuración Actual:*\nNivel: {level} | Acción: {action}",
+      "invalid_level": "❌ Nivel inválido. Usa: low, medium, high",
+      "help": "📖 *Ayuda Antispam*\n\n*Comandos:*\n• `antispam on` - Activar (por defecto: medium)\n• `antispam off` - Desactivar\n• `antispam <low/medium/high>` - Cambiar sensibilidad\n• `antispam <warn/delete/kick>` - Cambiar acción\n• `antispam info` - Ver configuración actual\n\n*Niveles:*\n• Low - Relajado (grupos activos)\n• Medium - Equilibrado (recomendado)\n• High - Estricto (grupos problemáticos)",
+      "spam_warning": "⚠️ @{mention} ¡Deja de hacer spam!",
+      "action_warn": "advertido (no expulsado)",
+      "action_delete": "mensajes eliminados solamente",
+      "action_kick": "expulsado del grupo"
+    },
+    "sticker": {
+      "desc": "Convierte una Imagen, GIF o Video Citado en Sticker.",
+      "reply_required": "Cita una Imagen o video."
+    },
+    "circle": {
+      "desc": "Convert an image into a circular sticker.",
+      "reply_required": "Cita una Imagen."
+    },
+    "take": {
+      "usage": "Ejemplo: take <Titulo,Artista,URL> (citando un audio o un sticker). Para audio, el titulo es requerido; artista y URL son opcionales.",
+      "desc": "Cambia los detalles del Sticker o Audio. Si respondes a un sticker, actualizara los metadatos de su paquete. Si respondes a un audio, agregara metadatos (titulo, artista, URL) al archivo.",
+      "reply_required": "Cita un Sticker o Musica.",
+      "additional_info": "Para los metadatos de audio, los artistas o la URL son opcionales.."
+    },
+    "mp4": {
+      "desc": "Convierte un Sticker Animado (WebP) en un video MP4.",
+      "reply_required": "Cita un Sticker Animado."
+    },
+    "story": {
+      "usage": "Ejemplo: story <username> (O Cita un mensaje contenga the username)",
+      "desc": "Descarga Historias de Instagram con el usuario especificado. Si hay varias historias disponibles, se mostrara una lista para seleccionar.",
+      "not_found": "No encontre Historias en este Usuario.",
+      "list": "Total {0} Historias disponibles. Seleccione una para descargar.\n"
+    },
+    "tag": {
+      "usage": "Ejemplo: `tag all` | `tag admin` | `tag notadmin` | `tag` <custom message> (O Cita un mensaje)",
+      "desc": "Menciona a miembros del grupo. Utiliza `tag all` para mencionar a todos los miembros, `tag admin` para mencionar solo a los administradores del grupo, `tag notadmin` para mencionar a los miembros que no sean administradores o proporciona un mensaje personalizado para enviar como mencion"
+    },
+    "tictactoe": {
+      "usage": "Example: tictactoe <opponent_jid> OR tictactoe normal <opponent_jid> OR tictactoe restart <opponent_jid> OR tictactoe end\nEl modo predeterminado es infinito, use 'tictactoe normal' para el modo normal.",
+      "desc": "Juega «3 en Raya» contra Alguien. Desafía a alguien mencionándolo, respondiendo a su mensaje o especificando su JID. Usa `tictactoe end` para terminar el juego y `tictactoe restart` <jid_DeOponente> para reiniciar con un nuevo oponente. El modo predeterminado es infinito, use `tictactoe normal` para el modo normal.",
+      "choose_opponent": "Elige con quien jugar citando su mensaje o mencionandolo. No puedes jugar contra ti mismo.",
+      "game_ended": "Juego Terminado.",
+      "game_restarted": "El juego se reinició con nuevo Jugador..",
+      "invalid_input": "Funcion Invalida. Usa `tictactoe end` para terminar el juego y `tictactoe restart` <jid_DeOponente> para reiniciar con un nuevo oponente.",
+      "players": "Jugadores",
+      "already_occupied": "_Ya ocupado_",
+      "current_player": "Jugador Actual",
+      "game_finish": "Juego Terminado 🏁",
+      "winner": "Ganador",
+      "restart": "Restart Game",
+      "header": "---Tic Tac Toe---"
+    },
+    "tiktok": {
+      "usage": "Como Utilizar:tiktok <TikTok URL> (O Cita un mensaje)",
+      "desc": "Descarga un Video de TikTok desde URL.",
+      "not_found": "Video no encontrado, Verifica el Link."
+    },
+    "tog": {
+      "usage": "Ejemplo: tog ping off",
+      "desc": "Activar o Desactivar Comandos.",
+      "invalid": "Error. Usa: tog <command> on|off (Ejemplo:, tog ping off)",
+      "self_reference": "¿¡¿¡¿¡¿¡¿¡De verdad querías matarme?!?!?!?!?!",
+      "enabled": "{0} Ha sido Activado.",
+      "disabled": "{0} Ha sido Desactivado."
+    },
+    "trt": {
+      "usage": "Ejemplo: trt ml hi O trt ml (Citando un Mensaje)",
+      "desc": "Traducir texto con Google Translate. Especificar el código del idioma de destino (y opcionalmente el código del idioma de origen) al citar un mensaje."
+    },
+    "twitter": {
+      "usage": "Ejemplo: twitter <Twitter URL> (O Cita un mensaje contenga URL)",
+      "desc": "Descarga a Twitter video. Si hay varias opciones de calidad disponibles, se le pedirá que elija una.",
+      "not_found": "No se encontro Multimedia.",
+      "choose_quality": "> Elige la Calidad del Video\n"
+    },
+    "upload": {
+      "usage": "Ejemplo: upload <URL> (O Cita un mensaje contenga URL)",
+      "desc": "Descarga archivos multimedia desde una URL proporcionada. En el caso de las URL abreviadas de Google Images, la URL directa de la imagen se recupera automáticamente."
+    },
+    "url": {
+      "usage": "Ejemplo: `url` O `url imgur` (Cita una Imagen o video)",
+      "desc": "Convierte una imagen o un vídeo en una URL. Opcionalmente, especifica un parámetro (Ejemplo:, 'imgur') para obtener la URL de un servicio específico."
+    },
+    "getvar": {
+      "usage": "Ejemplo: `getvar` sudo",
+      "desc": "Muestra el valor de una variable. Proporciona la clave de la variable (sin distinguir entre mayúsculas y minúsculas) para recuperar su valor.",
+      "not_found": "{0} No ha sido encontrado en las variables."
+    },
+    "delvar": {
+      "usage": "Ejemplo: delvar sudo",
+      "desc": "Eliminar una variable especificando su clave.",
+      "not_found": "{0} No ha sido encontrado en las variables.",
+      "deleted": "{0} Ha sido Borrado."
+    },
+    "setvar": {
+      "usage": "Ejemplo: `setvar` key = value",
+      "desc": "Establezca una variable con una clave y un valor específicos. Utilice '=' para separar la clave del valor.",
+      "success": "Nueva Variable {0} Agregado a {1}."
+    },
+    "allvar": {
+      "desc": "Muestra todas las variables almacenadas."
+    },
+    "vote": {
+      "usage": "> Ejemplo:\nvote q|¿Cuál es tu color favorito?\no|😀|Azul\no|😊|Rojo",
+      "desc": "Iniciar una Encuesta en un grupo de WhatsApp.",
+      "notes": "Si no se especifican destinatarios, el mensaje de Encuesta simplemente se enviará al grupo actual.",
+      "no_vote": "No existen votos!",
+      "total_vote": "total de votos : *{0}*",
+      "delete_vote": "Eliminar el voto actual para establecer uno nuevo.",
+      "option_required": "Se requieren dos o más opciones",
+      "question_required": "pregunta requerida",
+      "vote": "Reacciona o cita una opcion para votar.",
+      "vote_deleted": "_El voto ha sido borrado._",
+      "voted": "@{0} votó por {1}\n\n${2}"
+    },
+    "warn": {
+      "usage": "Ejemplo: Cita o Menciona al Usuario que Recibira una Advertencia. `warn` @user o `warn reset` (para resetear).",
+      "desc": "Advertir a un usuario en el chat grupal. Este comando aumenta advertencias de un usuario. Si el numero supera el límite, el usuario será expulsado del grupo.. Use 'warn reset' para Resetear Advertencias.",
+      "reset_usage": "Cita o menciona para Resetear. Ejemplo: warn reset @user.",
+      "cannot_remove_admin": "No puedo Eliminar a un Administrador...",
+      "kick_default": "{0} has been kicked for exceeding warn limit.",
+      "warn_default": "⚠️ Warning {0}! {1}/{2} warnings remaining."
+    },
+    "wcg": {
+      "usage": "Ejemplo:\n- `wcg start` (Forzar el inicio del juego)\n- `wcg end` (termina el juego actual)\nEl modo predeterminado es fácil.",
+      "desc": "Juego cadenas de palabras (cadáver exquisito texto): participa agregando una palabra que continúe la cadena. Utiliza `wcg start` para forzar el inicio de un nuevo juego o `wcg end` para detener el juego actual.",
+      "game_ends": "Game Ends",
+      "already_used": "_Already Used this Word!_",
+      "not_starting_with": "_Not Starting with {0}_",
+      "length_limit": "_This word length is less than {0}_",
+      "not_in_list": "_This word is not in my words list_",
+      "turn_info": "🎲Turn : @{0}\n🙌Next : @{1}\n🆎Your word must start with *{2}* and include at least *{3}* letters\n🏆Players remaining : {4}/{5}\n⏳You have *{6}s* to answer\n📝Total words : {7}",
+      "timeout": "@{0} ran out of time! They're out! 🚫",
+      "winner": "@{0} Won 🏆\nWords : *{1}*\nLongest word : *{2} ({3})* by @{4} 📚\nTime : *{5}* ⏱️",
+      "joined": "@{0} Joined 👏",
+      "starting": "🎮 Game starting...\n👥 Needs 2 or more players 🙋‍♂️🙋‍♀️\n⏳ 60 seconds left to join ⏳\n🧩 Mode {0}",
+      "starts_in": "🎮 Game starts in {0} seconds ⏳\nType *join* to play 🙋‍♂️🙋‍♀️\n🧩 Mode {1}{2}",
+      "players_count": "\n\n👥 {0} players joined.",
+      "terminated": "_Not enough players. Game terminated._",
+      "mode_update": "_Modo WCG actualizado a {0}_"
+    },
+    "wrg": {
+      "usage": "Ejemplos:\n- wrg start (forzar el inicio del juego de palabras aleatorias)\n- wrg hard (iniciar en modo difícil)\n- wrg easy (iniciar en modo fácil)\n- wrg end (terminar el juego actual)",
+      "desc": "Juego de palabras al azar: participa en un juego en el que debes enviar palabras en respuesta a una pregunta aleatoria. Usa `wrg start` para comenzar un nuevo juego o `wrg end` para terminar."
+    },
+    "yts": {
+      "usage": "Ejemplo: yts baymax",
+      "desc": "Busca videos de YouTube por palabra o Link. Si utilizas un Link se mostrara la informacion del Video."
+    },
+    "song": {
+      "usage": "Ejemplo: song Shakira WakaWaka O song <YouTube URL> (tambien puedes citar un mensaje)",
+      "desc": "Descarga una canción de YouTube. Si se proporciona una URL, la canción se descarga directamente; de lo contrario, se realiza una búsqueda y se genera una lista de resultados para seleccionar.",
+      "not_found": "No se ha encontrado Resultados."
+    },
+    "video": {
+      "usage": "Ejemplo: video <YouTube URL> (O Cita un mensaje)",
+      "desc": "Descarga un vídeo de YouTube. Si se proporciona una URL directa, se descarga el vídeo; si se proporciona un Texto, se genera una lista de resultados para seleccionar.",
+      "not_found": "No se encontro Resultado."
+    },
+    "update": {
+      "usage": "Ejemplo: update",
+      "desc": "Comprueba si hay Actualizaciones para el Bot",
+      "up_to_date": "El Bot ya esta Actualizado.",
+      "available": "{0} Actualizaciones Disponibles:\n{1}"
+    },
+    "update_now": {
+      "usage": "Ejemplo: update now",
+      "desc": "Actualiza el Bot",
+      "up_to_date": "El Bot ya esta actualizado, no se detectaron actualizaciones en el Repositorio.",
+      "updating": "Actualizando...",
+      "updated": "Se ha Completado la Actualizacion Correctamente"
+    },
+    "antigm": {
+      "usage": "> Uso:\n- antigm <on|off> — Activar o desactivar anti mención de grupo\n- antigm <delete|warn|kick> — Establecer acción cuando alguien menciona al grupo\n- antigm ignore <jid,jid,jid,...> — Ignorar anti mención de grupo para grupos específicos",
+      "action": "Acción actualizada: las menciones de grupo ahora resultarán en *{0}*.",
+      "filter": "JIDs ignorados actualizados para anti mención de grupo.",
+      "enabled": "Anti mención de grupo ha sido activada.",
+      "disabled": "Anti mención de grupo ha sido desactivada."
+    },
+    "reminder": {
+      "desc": "Administrar recordatorios de Google Calendar.",
+      "usage": "> *Uso de Recordatorios:*\n- `reminder <texto>` - Establecer un nuevo recordatorio (ej. 'reunión mañana a las 10am')\n- `reminder list` - Listar todos los recordatorios\n- `reminder del <id>` - Eliminar un recordatorio",
+      "success": "✅ Recordatorio establecido: *{0}* el {1}",
+      "list": "*Tus Recordatorios:*\n\n{0}",
+      "list_empty": "No se encontraron recordatorios.",
+      "deleted": "Recordatorio eliminado correctamente!",
+      "invalid_id": "Por favor, proporciona un ID de evento válido.",
+      "auth_required": "*Autenticación Requerida:*\n\nUsa \"gauth\" para autorizar el bot.",
+      "time": "Hora",
+      "id": "ID",
+      "short_id_info": "\n\n*Nota:* Solo necesitas ingresar los primeros 2-4 caracteres del ID para el comando de eliminación."
+    },
+    "gauth": {
+      "desc": "Gestiona la autenticación de la API de Google para funciones como Restricción de Edad en YouTube, Google Drive, Calendar y Tasks.",
+      "usage": "*Comandos de Google Auth:*\\n\\n- `.gauth auth` — Inicia el proceso de autenticación.\\n- `.gauth code <url_or_code>` — Valida el código de autenticación.\\n- `.gauth import` — Importa `credentials.json` (responde al archivo).\\n- `.gauth status` — Verifica el estado actual de la autenticación.\\n- `.gauth logout` — Borra las credenciales y tokens para esta sesión.\\n\\n*Nota:* Google Auth es opcional para las funciones generales de YouTube, pero obligatorio para videos con restricción de edad e integraciones con Google Drive/Calendar/Tasks.",
+      "prompt": "*Guía de configuración de la autenticación de Google:*\n\n1. *Crear proyecto:* Vaya a https://console.cloud.google.com/, haga clic en \"Select a project\" > \"New Project\", asígnele el nombre \"Levanter\" y hace clic en \"Create\".\n2. *Habilitar APIs:* Vaya a \"APIs & Services\" > \"Library\". Busque y habilite \"Google Drive API\", \"Google Calendar API\" y \"Google Tasks API\".\n3. *Pantalla de consentimiento de OAuth:* Vaya a \"APIs & Services\" > \"OAuth consent screen\". Elija \"External\", complete los campos obligatorios y, en la sección \"Audience\", agregue su correo electrónico a \"Test users\" (OBLIGATORIO).\n4. *Credenciales:* Vaya a \"APIs & Services\" > \"Credentials\". Haga clic en \"Create Credentials\" > \"OAuth client ID\". Seleccione \"Desktop app\" como tipo de aplicación, asígnele un nombre y haga clic en \"Create\".\n5. *Descargar:* Junto a su nuevo Client ID, haga clic en el icono de descarga (JSON). Guárdelo y use `.gauth import` respondiendo al archivo.\n6. *Autorizar:* Ahora haga clic en el enlace de abajo para autorizar:\n{0}\n\n7. *Completar:* Inicie sesión, acepte la advertencia de \"Unverified app\" (Haga clic en \"Advanced\" > \"Go to Levanter\"), copie la URL completa de la barra de direcciones después de la redirección y envíe:\n`.gauth code <url_copiada>`",
+      "success": "¡Autenticación exitosa!",
+      "import_success": "¡Archivo `credentials.json` importado con éxito! Ahora use `.gauth auth` para autorizar.",
+      "import_reply": "Por favor, responda a un archivo `credentials.json`.",
+      "status_auth": "*Estado:* Autenticado para la sesión.",
+      "status_not_auth": "*Estado:* No autenticado para la sesión. Use `.gauth auth`.",
+      "logout": "Sesión cerrada y datos de Google Auth limpiados para la sesión.",
+      "failed": "*Error:* {0}"
+    },
+    "gdrive": {
+      "desc": "Operaciones de Google Drive (subir, listar, eliminar).",
+      "upload_success": "¡Carga completa!",
+      "uploading": "Subiendo multimedia a Drive...",
+      "not_authorized": "No autorizado. Usa \"backup auth\".",
+      "list": "*Archivos de Google Drive:*\n\n{0}",
+      "list_empty": "No se encontraron archivos en la carpeta Levanter.",
+      "deleted": "¡Archivo eliminado correctamente!",
+      "invalid_id": "Por favor, proporciona un ID de archivo válido.",
+      "error": "*Error:* {0}",
+      "url_prompt": "Proporcione una URL válida, etiquete un mensaje multimedia o use subcomandos: list, del <id>, dl <id>.\nEjemplo: `gupload list`",
+      "short_id_info": "\n\n*Nota:* Solo necesitas ingresar los primeros 2-4 caracteres del ID para los comandos de descarga o eliminación."
+    },
+    "task": {
+      "desc": "Administra tus Google Tasks",
+      "usage": "Uso: task <list | lists | switch <nombre> | add <texto> | del <id> | done <id> | update <id> <texto> | <texto>>",
+      "added": "Tarea añadida: *{0}*\nVence: {1}",
+      "deleted": "Tarea eliminada.",
+      "updated": "Tarea *{0}* marcada como *{1}*",
+      "list_empty": "No se encontraron tareas.",
+      "list_header": "📝 *Tareas ({0})*:\n",
+      "not_found": "Tarea no encontrada.",
+      "auth_required": "Por favor, autentícate usando *.gauth auth* y habilita los permisos de Google Tasks.",
+      "list_lists": "📝 *Listas de Tareas*:\n",
+      "switched": "Se cambió la lista de tareas predeterminada a *{0}*."
+    }
+  }
+}
