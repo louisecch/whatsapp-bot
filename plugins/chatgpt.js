@@ -1,4 +1,19 @@
 const axios = require('axios')
+const path = require('path')
+const { existsSync } = require('fs')
+
+// Ensure env is loaded even if core boot order changes
+try {
+  const configEnvPath = path.join(__dirname, '../config.env')
+  const dotEnvPath = path.join(__dirname, '../.env')
+  const envPath = existsSync(configEnvPath)
+    ? configEnvPath
+    : existsSync(dotEnvPath)
+      ? dotEnvPath
+      : null
+  if (envPath) require('dotenv').config({ path: envPath })
+} catch {}
+
 const { bot, getGPTResponse, getDallEResponse } = require('../lib')
 
 async function openAIRespond({ prompt, image }) {
@@ -72,11 +87,16 @@ bot(
     }
 
     let res
-    if ((process.env.OPENAI_API_KEY || '').trim()) {
-      res = await openAIRespond({ prompt: match, image })
-    } else {
-      // fallback to whatever backend this repo ships with
-      res = await getGPTResponse(match, message.id, null)
+    try {
+      if ((process.env.OPENAI_API_KEY || '').trim()) {
+        res = await openAIRespond({ prompt: match, image })
+      } else {
+        // fallback to whatever backend this repo ships with
+        res = await getGPTResponse(match, message.id, null)
+      }
+    } catch (e) {
+      const msg = String(e?.response?.data?.error?.message || e?.message || e)
+      res = `GPT error: ${msg}`
     }
     await message.send(res, { quoted: message.data })
   }
