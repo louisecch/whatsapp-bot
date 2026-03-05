@@ -325,6 +325,7 @@ bot(
 );
 
 // ── auto-reply (private, allowlisted contact only) ────────────────────────
+console.log("[auto-reply] draft.js loaded — registering autoDraftReply handler");
 bot(
   { on: "text", fromMe: false, type: "autoDraftReply" },
   async (message, _match, ctx) => {
