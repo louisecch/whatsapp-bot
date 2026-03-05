@@ -165,7 +165,7 @@ async function tryCalendarPick(messageText, ctx) {
     const results = dayStrs.map((d) => `${d}=${availability.get(d)}`).join(", ");
     console.log(`[auto-reply] calendar availability: ${results}`);
   } catch (_e) {
-    console.log(`[auto-reply] calendar API error: ${_e?.message || _e}`);
+    process.stderr.write(`[auto-reply] calendar API error: ${_e?.message || _e}\n`);
     return null;
   }
 
