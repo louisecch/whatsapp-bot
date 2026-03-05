@@ -28,11 +28,20 @@ const { extractDateOptions } = require("../lib/dateOptions");
 const { isFreeOnDays } = require("../lib/googleCalendar");
 
 // Temporary allowlist for auto-reply test
-const DEFAULT_AUTO_REPLY_TARGETS = ["85261924337"];
+const DEFAULT_AUTO_REPLY_TARGETS = [
+  "85261924337",
+  "85298017183",
+  "85269981788",
+  "85297513151",
+  "85298635033",
+  "85254841551",
+  "85290633373",
+  "85263794109",
+];
 const AUTO_REPLY_COOLDOWN_MS = 15000;
 const autoReplyLastSentAt = new Map(); // jid -> timestamp
 
-// ── helpers ────────────────────────────────────────────────────────────────
+// ── helpers ───────────2─────────────────────────────────────────────────────
 
 function truthy(v) {
   return ["1", "true", "yes", "y", "on"].includes(
@@ -121,10 +130,16 @@ async function tryCalendarPick(messageText, ctx) {
   const enabled = truthy(
     ctx?.AUTO_DRAFT_CALENDAR || process.env.AUTO_DRAFT_CALENDAR || "true",
   );
-  if (!enabled) return null;
+  if (!enabled) {
+    console.log("[auto-reply] calendar check disabled (AUTO_DRAFT_CALENDAR)");
+    return null;
+  }
 
   const parsed = extractDateOptions(messageText);
-  if (!parsed?.days?.length) return null;
+  if (!parsed?.days?.length) {
+    console.log("[auto-reply] no date options found in message, skipping calendar check");
+    return null;
+  }
 
   const calendarId = (
     ctx?.GOOGLE_CALENDAR_ID ||
@@ -137,6 +152,9 @@ async function tryCalendarPick(messageText, ctx) {
     "Asia/Hong_Kong"
   ).trim();
 
+  const dayStrs = parsed.days.map((d) => d.toISOString().slice(0, 10));
+  console.log(`[auto-reply] checking Google Calendar for days: ${dayStrs.join(", ")} (calendarId=${calendarId}, tz=${timeZone})`);
+
   let availability;
   try {
     availability = await isFreeOnDays({
@@ -144,7 +162,10 @@ async function tryCalendarPick(messageText, ctx) {
       calendarId,
       timeZone,
     });
+    const results = dayStrs.map((d) => `${d}=${availability.get(d)}`).join(", ");
+    console.log(`[auto-reply] calendar availability: ${results}`);
   } catch (_e) {
+    console.log(`[auto-reply] calendar API error: ${_e?.message || _e}`);
     return null;
   }
 
@@ -307,7 +328,11 @@ bot(
 bot(
   { on: "text", fromMe: false, type: "autoDraftReply" },
   async (message, _match, ctx) => {
-    if (!shouldAutoReplyToContact(message, ctx)) return;
+    console.log(`[auto-reply] handler triggered for jid=${message.jid} text="${message.text?.trim()}"`);
+    if (!shouldAutoReplyToContact(message, ctx)) {
+      console.log(`[auto-reply] skipped: not an allowlisted contact (jid=${message.jid})`);
+      return;
+    }
     if (!message.text || !message.text.trim()) return;
     // ignore command-like messages
     if (/^[./!#]/.test(message.text.trim())) return;
@@ -315,7 +340,10 @@ bot(
     const now = Date.now();
     const key = message.jid;
     const last = autoReplyLastSentAt.get(key) || 0;
-    if (now - last < AUTO_REPLY_COOLDOWN_MS) return;
+    if (now - last < AUTO_REPLY_COOLDOWN_MS) {
+      console.log(`[auto-reply] skipped: cooldown active for ${message.jid}`);
+      return;
+    }
 
     // Capture incoming message in history
     chatHistory.addMessage(key, { fromMe: false, text: message.text.trim() });
@@ -338,8 +366,10 @@ bot(
       }
 
       // Calendar-aware date picking
+      console.log(`[auto-reply] received message from ${message.jid}: "${message.text.trim()}"`);
       const calendarReply = await tryCalendarPick(message.text, ctx);
       if (calendarReply) {
+        console.log(`[auto-reply] calendar reply selected: "${calendarReply}"`);
         await message.send(calendarReply, { quoted: message.data });
         chatHistory.addMessage(key, { fromMe: true, text: calendarReply });
         autoReplyLastSentAt.set(key, now);
