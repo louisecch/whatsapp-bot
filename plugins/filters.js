@@ -45,16 +45,19 @@ bot(
 )
 
 bot({ on: 'text', fromMe: false, type: 'filterOrLydia' }, async (message) => {
+  console.log(`[filterOrLydia] fired for jid=${message.jid}`)
   const filters = await getFilter(message.jid, message.id)
 
   for (const { pattern, text } of filters) {
     const regexPattern = new RegExp(`(?:^|\\W)${pattern}(?:$|\\W)`, 'i')
     if (regexPattern.test(message.text)) {
+      console.log(`[filterOrLydia] filter match → returning`)
       return message.send(text, { quoted: message.data })
     }
   }
 
   const chatbotResponse = await chatBot(message)
+  console.log(`[filterOrLydia] chatBot returned: ${chatbotResponse ? 'yes' : 'null/false'}`)
   if (chatbotResponse) return message.send(chatbotResponse, { quoted: message.data })
 })
 

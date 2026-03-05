@@ -326,6 +326,13 @@ bot(
 
 // ── auto-reply (private, allowlisted contact only) ────────────────────────
 console.log("[auto-reply] draft.js loaded — registering autoDraftReply handler");
+// Debug: log ALL text messages regardless of fromMe, to check what value the framework passes
+bot(
+  { on: "text", fromMe: true, type: "autoDraftReplyDebug" },
+  async (message) => {
+    console.log(`[auto-reply-debug fromMe:true] jid=${message.jid} fromMe=${message.fromMe} text="${message.text?.trim()}"`);
+  },
+);
 bot(
   { on: "text", fromMe: false, type: "autoDraftReply" },
   async (message, _match, ctx) => {
