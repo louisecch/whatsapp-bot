@@ -320,6 +320,15 @@ async function tryCalendarPick(messageText, ctx, senderJid = null) {
   return `That${timeStr ? ' time' : ''} works for me 😊`;
 }
 
+function safeHistory(key) {
+  try {
+    const h = chatHistory.formatHistoryForContext(key)
+    return typeof h === 'string' ? h : ''
+  } catch {
+    return ''
+  }
+}
+
 function apiErrorMessage(err) {
   const status = err?.response?.status
   if (status === 401) return "looks like there's an issue with my AI setup — I'll fix it and reply soon!"
@@ -466,7 +475,7 @@ bot(
 
     try {
       const conversationHistory =
-        chatHistory.formatHistoryForContext(sourceJid);
+        safeHistory(sourceJid);
       const options = await generateDraftReplies(
         targetText,
         extraContext,
@@ -557,7 +566,7 @@ bot(
         return;
       }
 
-      const conversationHistory = chatHistory.formatHistoryForContext(key);
+      const conversationHistory = safeHistory(key);
       const options = await generateDraftReplies(
         message.text.trim(),
         "",
@@ -634,7 +643,7 @@ bot(
         return
       }
 
-      const conversationHistory = chatHistory.formatHistoryForContext(key)
+      const conversationHistory = safeHistory(key)
       const options = await generateDraftReplies(transcript, '', conversationHistory)
       const reply = String(options?.[0] || '').trim()
       if (!reply) {
@@ -690,7 +699,7 @@ bot(
         ? `[sent an image: ${description}] "${caption}"`
         : `[sent an image: ${description}]`
       chatHistory.addMessage(key, { fromMe: false, text: incomingText })
-      const conversationHistory = chatHistory.formatHistoryForContext(key)
+      const conversationHistory = safeHistory(key)
       const options = await generateDraftReplies(incomingText, '', conversationHistory)
       const reply = String(options?.[0] || '').trim()
       if (!reply) {
