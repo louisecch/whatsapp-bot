@@ -29,16 +29,25 @@ const chatHistory = require("../lib/chathistory");
 const { extractDateOptions } = require("../lib/dateOptions");
 const { isFreeOnDays } = require("../lib/googleCalendar");
 
-// Temporary allowlist for auto-reply test
-const DEFAULT_AUTO_REPLY_TARGETS = [
-  "85261924337",
-  "85298017183",
-  "85269981788",
-  "85297513151",
-  "85298635033",
-  "85254841551",
-  "85290633373",
-  "85263794109",
+// Backed-up original allowlist (kept for reference)
+// const _ORIGINAL_ALLOWLIST = [
+//   "85261924337",
+//   "85298017183",
+//   "85269981788",
+//   "85297513151",
+//   "85298635033",
+//   "85254841551",
+//   "85290633373",
+//   "85263794109",
+// ];
+
+// Blocklist — reply to everyone in DMs EXCEPT these numbers
+const DEFAULT_AUTO_REPLY_BLOCKLIST = [
+  "14155098648",
+  "85261701066",
+  "85267473751",
+  "85291266039",
+  "447913950794",
 ];
 const autoReplyLastSentAt = new Map(); // jid -> timestamp (kept for future use)
 
@@ -56,16 +65,16 @@ function normalizePhone(raw) {
   return String(raw || "").replace(/\D+/g, "");
 }
 
-function getAutoReplyTargets(ctx) {
+function getAutoReplyBlocklist(ctx) {
   const envRaw = (
-    ctx?.AUTO_DRAFT_TARGETS ||
-    process.env.AUTO_DRAFT_TARGETS ||
+    ctx?.AUTO_DRAFT_BLOCKLIST ||
+    process.env.AUTO_DRAFT_BLOCKLIST ||
     ""
   )
     .split(",")
     .map((x) => normalizePhone(x))
     .filter(Boolean);
-  return envRaw.length ? envRaw : DEFAULT_AUTO_REPLY_TARGETS;
+  return envRaw.length ? envRaw : DEFAULT_AUTO_REPLY_BLOCKLIST;
 }
 
 function shouldAutoReplyToContact(message, ctx) {
@@ -76,8 +85,8 @@ function shouldAutoReplyToContact(message, ctx) {
   if (!enabled) return false;
 
   const contactNum = normalizePhone(jidToNum(message.jid));
-  const targets = getAutoReplyTargets(ctx);
-  return targets.includes(contactNum);
+  const blocklist = getAutoReplyBlocklist(ctx);
+  return !blocklist.includes(contactNum);
 }
 
 function firstNameFromMessage(message) {
