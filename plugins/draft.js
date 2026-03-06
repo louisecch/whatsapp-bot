@@ -538,59 +538,59 @@ bot(
       return;
     }
 
-    const now = Date.now();
     const key = message.jid;
-    // Capture incoming message in history
+    // Capture incoming message in history immediately (before queueing)
     chatHistory.addMessage(key, { fromMe: false, text: message.text.trim() });
 
-    // Avoid overlapping generations per chat
-    if (store.isGenerating(key)) return;
-    store.setGenerating(key, true);
-    try {
-      // Hard-coded rule override
-      if (isInTownQuestion(message.text)) {
-        const first = firstNameFromMessage(message);
-        const prefix = first ? `Hi ${first}, ` : "Hi, ";
-        const canned =
-          prefix +
-          "I'm not in town yet. Will definitely let you guys know when I've booked the ticket! 🙏🏻😊 Thank you so much.";
-        await message.send(canned, { quoted: message.data });
-        chatHistory.addMessage(key, { fromMe: true, text: canned });
-        autoReplyLastSentAt.set(key, now);
-        return;
-      }
+    // Queue AI generation — messages are processed in order, never dropped mid-conversation
+    store.enqueue(key, async () => {
+      const now = Date.now();
+      try {
+        // Hard-coded rule override
+        if (isInTownQuestion(message.text)) {
+          const first = firstNameFromMessage(message);
+          const prefix = first ? `Hi ${first}, ` : "Hi, ";
+          const canned =
+            prefix +
+            "I'm not in town yet. Will definitely let you guys know when I've booked the ticket! 🙏🏻😊 Thank you so much.";
+          await message.send(canned, { quoted: message.data });
+          chatHistory.addMessage(key, { fromMe: true, text: canned });
+          autoReplyLastSentAt.set(key, now);
+          return;
+        }
 
-      // Calendar-aware date picking
-      console.log(`[auto-reply] received message from ${message.jid}: "${message.text.trim()}"`);
-      const calendarReply = await tryCalendarPick(message.text, ctx, message.jid);
-      if (calendarReply) {
-        console.log(`[auto-reply] calendar reply selected: "${calendarReply}"`);
-        await message.send(calendarReply, { quoted: message.data });
-        chatHistory.addMessage(key, { fromMe: true, text: calendarReply });
-        autoReplyLastSentAt.set(key, now);
-        return;
-      }
+        // Calendar-aware date picking
+        console.log(`[auto-reply] received message from ${message.jid}: "${message.text.trim()}"`);
+        const calendarReply = await tryCalendarPick(message.text, ctx, message.jid);
+        if (calendarReply) {
+          console.log(`[auto-reply] calendar reply selected: "${calendarReply}"`);
+          await message.send(calendarReply, { quoted: message.data });
+          chatHistory.addMessage(key, { fromMe: true, text: calendarReply });
+          autoReplyLastSentAt.set(key, now);
+          return;
+        }
 
-      const conversationHistory = await safeHistory(key);
-      const options = await generateDraftReplies(
-        message.text.trim(),
-        "",
-        conversationHistory,
-      );
-      const reply = String(options?.[0] || "").trim();
-      if (!reply) return;
-      await message.send(reply, { quoted: message.data });
-      chatHistory.addMessage(key, { fromMe: true, text: reply });
-      autoReplyLastSentAt.set(key, now);
-    } catch (_e) {
-      throttledStderr(`auto-reply:${_e?.response?.status || 'err'}`, `[auto-reply] error for ${message.jid}: ${_e?.message || _e}\n`)
-      console.log(`[auto-reply] sending fallback message to ${message.jid}`)
-      try { await message.send(apiErrorMessage(_e)) } catch (sendErr) {
-        process.stderr.write(`[auto-reply] fallback send failed: ${sendErr?.message || sendErr}\n`)
+        const conversationHistory = await safeHistory(key);
+        const options = await generateDraftReplies(
+          message.text.trim(),
+          "",
+          conversationHistory,
+        );
+        const reply = String(options?.[0] || "").trim();
+        if (!reply) return;
+        await message.send(reply, { quoted: message.data });
+        chatHistory.addMessage(key, { fromMe: true, text: reply });
+        autoReplyLastSentAt.set(key, now);
+      } catch (_e) {
+        throttledStderr(`auto-reply:${_e?.response?.status || 'err'}`, `[auto-reply] error for ${message.jid}: ${_e?.message || _e}\n`)
+        console.log(`[auto-reply] sending fallback message to ${message.jid}`)
+        try { await message.send(apiErrorMessage(_e)) } catch (sendErr) {
+          process.stderr.write(`[auto-reply] fallback send failed: ${sendErr?.message || sendErr}\n`)
+        }
       }
-    } finally {
-      store.setGenerating(key, false);
-    }
+    }).catch(err => {
+      process.stderr.write(`[auto-reply] queue error for ${message.jid}: ${err?.message || err}\n`)
+    })
   },
 );
 
@@ -604,70 +604,67 @@ bot(
       return
     }
 
-    const now = Date.now()
     const key = message.jid
-    if (store.isGenerating(key)) {
-      console.log(`[auto-reply-audio] skipped: already generating for ${message.jid}`)
-      return
-    }
-    store.setGenerating(key, true)
-    try {
-      console.log(`[auto-reply-audio] downloading voice note from ${message.jid}`)
-      const buf = await message.downloadMediaMessage()
-      if (!buf) {
-        console.log(`[auto-reply-audio] download returned empty buffer for ${message.jid}`)
-        return
-      }
-      console.log(`[auto-reply-audio] transcribing ${buf.length} bytes from ${message.jid}`)
-      const transcript = await transcribeAudio(buf)
-      console.log(`[auto-reply-audio] transcript from ${message.jid}: "${transcript}"`)
-      if (!transcript) {
-        console.log(`[auto-reply-audio] empty transcript, skipping reply`)
-        return
-      }
-      chatHistory.addMessage(key, { fromMe: false, text: `[voice note]: ${transcript}` })
+    store.enqueue(key, async () => {
+      const now = Date.now()
+      try {
+        console.log(`[auto-reply-audio] downloading voice note from ${message.jid}`)
+        const buf = await message.downloadMediaMessage()
+        if (!buf) {
+          console.log(`[auto-reply-audio] download returned empty buffer for ${message.jid}`)
+          return
+        }
+        console.log(`[auto-reply-audio] transcribing ${buf.length} bytes from ${message.jid}`)
+        const transcript = await transcribeAudio(buf)
+        console.log(`[auto-reply-audio] transcript from ${message.jid}: "${transcript}"`)
+        if (!transcript) {
+          console.log(`[auto-reply-audio] empty transcript, skipping reply`)
+          return
+        }
+        chatHistory.addMessage(key, { fromMe: false, text: `[voice note]: ${transcript}` })
 
-      // in-town override
-      if (isInTownQuestion(transcript)) {
-        const first = firstNameFromMessage(message)
-        const prefix = first ? `Hi ${first}, ` : 'Hi, '
-        const canned = prefix + "I'm not in town yet. Will definitely let you guys know when I've booked the ticket! 🙏🏻😊 Thank you so much."
-        await message.send(canned, { quoted: message.data })
-        chatHistory.addMessage(key, { fromMe: true, text: canned })
+        // in-town override
+        if (isInTownQuestion(transcript)) {
+          const first = firstNameFromMessage(message)
+          const prefix = first ? `Hi ${first}, ` : 'Hi, '
+          const canned = prefix + "I'm not in town yet. Will definitely let you guys know when I've booked the ticket! 🙏🏻😊 Thank you so much."
+          await message.send(canned, { quoted: message.data })
+          chatHistory.addMessage(key, { fromMe: true, text: canned })
+          autoReplyLastSentAt.set(key, now)
+          return
+        }
+
+        // calendar check
+        const calendarReply = await tryCalendarPick(transcript, ctx, message.jid)
+        if (calendarReply) {
+          console.log(`[auto-reply-audio] calendar reply: "${calendarReply}"`)
+          await message.send(calendarReply, { quoted: message.data })
+          chatHistory.addMessage(key, { fromMe: true, text: calendarReply })
+          autoReplyLastSentAt.set(key, now)
+          return
+        }
+
+        const conversationHistory = await safeHistory(key)
+        const options = await generateDraftReplies(transcript, '', conversationHistory)
+        const reply = String(options?.[0] || '').trim()
+        if (!reply) {
+          console.log(`[auto-reply-audio] generateDraftReplies returned empty reply`)
+          return
+        }
+        console.log(`[auto-reply-audio] sending reply to ${message.jid}: "${reply}"`)
+        await message.send(reply, { quoted: message.data })
+        chatHistory.addMessage(key, { fromMe: true, text: reply })
         autoReplyLastSentAt.set(key, now)
-        return
+      } catch (_e) {
+        throttledStderr(`auto-reply-audio:${_e?.response?.status || 'err'}`, `[auto-reply-audio] error for ${message.jid}: ${_e?.message || _e}\n`)
+        console.log(`[auto-reply-audio] sending fallback message to ${message.jid}`)
+        try { await message.send(apiErrorMessage(_e)) } catch (sendErr) {
+          process.stderr.write(`[auto-reply-audio] fallback send failed: ${sendErr?.message || sendErr}\n`)
+        }
       }
-
-      // calendar check
-      const calendarReply = await tryCalendarPick(transcript, ctx, message.jid)
-      if (calendarReply) {
-        console.log(`[auto-reply-audio] calendar reply: "${calendarReply}"`)
-        await message.send(calendarReply, { quoted: message.data })
-        chatHistory.addMessage(key, { fromMe: true, text: calendarReply })
-        autoReplyLastSentAt.set(key, now)
-        return
-      }
-
-      const conversationHistory = await safeHistory(key)
-      const options = await generateDraftReplies(transcript, '', conversationHistory)
-      const reply = String(options?.[0] || '').trim()
-      if (!reply) {
-        console.log(`[auto-reply-audio] generateDraftReplies returned empty reply`)
-        return
-      }
-      console.log(`[auto-reply-audio] sending reply to ${message.jid}: "${reply}"`)
-      await message.send(reply, { quoted: message.data })
-      chatHistory.addMessage(key, { fromMe: true, text: reply })
-      autoReplyLastSentAt.set(key, now)
-    } catch (_e) {
-      throttledStderr(`auto-reply-audio:${_e?.response?.status || 'err'}`, `[auto-reply-audio] error for ${message.jid}: ${_e?.message || _e}\n`)
-      console.log(`[auto-reply-audio] sending fallback message to ${message.jid}`)
-      try { await message.send(apiErrorMessage(_e)) } catch (sendErr) {
-        process.stderr.write(`[auto-reply-audio] fallback send failed: ${sendErr?.message || sendErr}\n`)
-      }
-    } finally {
-      store.setGenerating(key, false)
-    }
+    }).catch(err => {
+      process.stderr.write(`[auto-reply-audio] queue error for ${message.jid}: ${err?.message || err}\n`)
+    })
   },
 )
 
@@ -681,49 +678,46 @@ bot(
       return
     }
 
-    const now = Date.now()
     const key = message.jid
-    if (store.isGenerating(key)) {
-      console.log(`[auto-reply-image] skipped: already generating for ${message.jid}`)
-      return
-    }
-    store.setGenerating(key, true)
-    try {
-      console.log(`[auto-reply-image] downloading image from ${message.jid}`)
-      const buf = await message.downloadMediaMessage()
-      if (!buf) {
-        console.log(`[auto-reply-image] download returned empty buffer for ${message.jid}`)
-        return
+    store.enqueue(key, async () => {
+      const now = Date.now()
+      try {
+        console.log(`[auto-reply-image] downloading image from ${message.jid}`)
+        const buf = await message.downloadMediaMessage()
+        if (!buf) {
+          console.log(`[auto-reply-image] download returned empty buffer for ${message.jid}`)
+          return
+        }
+        const mimetype = (message.mimetype || 'image/jpeg').split(';')[0].trim()
+        console.log(`[auto-reply-image] describing ${buf.length} bytes (${mimetype}) from ${message.jid}`)
+        const description = await describeImage(buf, mimetype)
+        console.log(`[auto-reply-image] description from ${message.jid}: "${description}"`)
+        const caption = message.text?.trim() || ''
+        const incomingText = caption
+          ? `[sent an image: ${description}] "${caption}"`
+          : `[sent an image: ${description}]`
+        chatHistory.addMessage(key, { fromMe: false, text: incomingText })
+        const conversationHistory = await safeHistory(key)
+        const options = await generateDraftReplies(incomingText, '', conversationHistory)
+        const reply = String(options?.[0] || '').trim()
+        if (!reply) {
+          console.log(`[auto-reply-image] generateDraftReplies returned empty reply`)
+          return
+        }
+        console.log(`[auto-reply-image] sending reply to ${message.jid}: "${reply}"`)
+        await message.send(reply, { quoted: message.data })
+        chatHistory.addMessage(key, { fromMe: true, text: reply })
+        autoReplyLastSentAt.set(key, now)
+      } catch (_e) {
+        throttledStderr(`auto-reply-image:${_e?.response?.status || 'err'}`, `[auto-reply-image] error for ${message.jid}: ${_e?.message || _e}\n`)
+        console.log(`[auto-reply-image] sending fallback message to ${message.jid}`)
+        try { await message.send(apiErrorMessage(_e)) } catch (sendErr) {
+          process.stderr.write(`[auto-reply-image] fallback send failed: ${sendErr?.message || sendErr}\n`)
+        }
       }
-      const mimetype = (message.mimetype || 'image/jpeg').split(';')[0].trim()
-      console.log(`[auto-reply-image] describing ${buf.length} bytes (${mimetype}) from ${message.jid}`)
-      const description = await describeImage(buf, mimetype)
-      console.log(`[auto-reply-image] description from ${message.jid}: "${description}"`)
-      const caption = message.text?.trim() || ''
-      const incomingText = caption
-        ? `[sent an image: ${description}] "${caption}"`
-        : `[sent an image: ${description}]`
-      chatHistory.addMessage(key, { fromMe: false, text: incomingText })
-      const conversationHistory = await safeHistory(key)
-      const options = await generateDraftReplies(incomingText, '', conversationHistory)
-      const reply = String(options?.[0] || '').trim()
-      if (!reply) {
-        console.log(`[auto-reply-image] generateDraftReplies returned empty reply`)
-        return
-      }
-      console.log(`[auto-reply-image] sending reply to ${message.jid}: "${reply}"`)
-      await message.send(reply, { quoted: message.data })
-      chatHistory.addMessage(key, { fromMe: true, text: reply })
-      autoReplyLastSentAt.set(key, now)
-    } catch (_e) {
-      throttledStderr(`auto-reply-image:${_e?.response?.status || 'err'}`, `[auto-reply-image] error for ${message.jid}: ${_e?.message || _e}\n`)
-      console.log(`[auto-reply-image] sending fallback message to ${message.jid}`)
-      try { await message.send(apiErrorMessage(_e)) } catch (sendErr) {
-        process.stderr.write(`[auto-reply-image] fallback send failed: ${sendErr?.message || sendErr}\n`)
-      }
-    } finally {
-      store.setGenerating(key, false)
-    }
+    }).catch(err => {
+      process.stderr.write(`[auto-reply-image] queue error for ${message.jid}: ${err?.message || err}\n`)
+    })
   },
 )
 
