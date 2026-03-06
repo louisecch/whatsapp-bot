@@ -34,6 +34,19 @@ BOT_LANG=es
 ```
 ---
 
+### 📅 Auto-Reply & Calendar Integration
+
+The bot includes an intelligent auto-reply system (enabled via `plugins/draft.js`) that can check your availability on Google Calendar.
+
+- **Smart Date Parsing**: Recognizes formats like `Mar 26`, `26/3`, `26/3 or 27/3`, etc.
+- **Time Awareness**: Supports specific time queries like `9am`, `9.30am`, `2pm`, or `14:00`.
+- **Timezone Inference**: Automatically detects the sender's timezone based on their phone number's country code (e.g., `+852` -> `Asia/Hong_Kong`, `+44` -> `Europe/London`).
+  - It translates the sender's requested time to your local timezone before checking your calendar.
+  - *Note*: If your calendar is empty at that translated time, the bot will say you are free. To prevent bookings during your sleep, consider blocking "Personal" or "Sleeping" slots on your calendar.
+- **OTP Protection**: Automatically ignores and never replies to messages that look like OTPs or verification codes.
+
+---
+
 ### Deployment Guide
 
 ### 1️⃣ Deploy on Koyeb
