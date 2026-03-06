@@ -19,6 +19,9 @@ The bot includes an intelligent auto-reply system (enabled via `plugins/draft.js
   - It translates the sender's requested time to your local timezone before checking your calendar.
   - *Note*: If your calendar is empty at that translated time, the bot will say you are free. To prevent bookings during your sleep, consider blocking "Personal" or "Sleeping" slots on your calendar.
 - **OTP Protection**: Automatically ignores and never replies to messages that look like OTPs or verification codes.
+- **Voice Note Transcription**: Incoming voice notes are automatically transcribed via OpenAI Whisper and replied to as if they were text messages.
+- **Image Understanding**: Incoming images are described via GPT-4o vision; the description (plus any caption) is used to generate a contextual reply.
+- **Group Chat Excluded**: Auto-reply only fires in private (1-on-1) chats — group messages are always ignored.
 
 ---
 

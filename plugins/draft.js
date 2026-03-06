@@ -22,7 +22,7 @@
 const axios = require("axios");
 const FormData = require("form-data");
 const { bot } = require("../lib");
-const { generateDraftReplies } = require("../lib/draftstyle");
+const { generateDraftReplies, withRetry, throttledStderr } = require("../lib/draftstyle");
 const store = require("../lib/draftstore");
 const { jidToNum } = require("../lib");
 const chatHistory = require("../lib/chathistory");
@@ -40,8 +40,7 @@ const DEFAULT_AUTO_REPLY_TARGETS = [
   "85290633373",
   "85263794109",
 ];
-const AUTO_REPLY_COOLDOWN_MS = 15000;
-const autoReplyLastSentAt = new Map(); // jid -> timestamp
+const autoReplyLastSentAt = new Map(); // jid -> timestamp (kept for future use)
 
 // ── helpers ───────────2─────────────────────────────────────────────────────
 
@@ -321,17 +320,24 @@ async function tryCalendarPick(messageText, ctx, senderJid = null) {
   return `That${timeStr ? ' time' : ''} works for me 😊`;
 }
 
+function apiErrorMessage(err) {
+  const status = err?.response?.status
+  if (status === 401) return "looks like there's an issue with my AI setup — I'll fix it and reply soon!"
+  if (status === 429) return "getting a lot of messages right now — give me a moment and I'll get back to you!"
+  return "sorry, give me a sec — I'll get back to you! 😅"
+}
+
 async function transcribeAudio(buffer) {
   const apiKey = (process.env.OPENAI_API_KEY || '').trim()
   if (!apiKey) throw new Error('OPENAI_API_KEY not set')
   const form = new FormData()
   form.append('file', buffer, { filename: 'voice.ogg', contentType: 'audio/ogg' })
   form.append('model', 'whisper-1')
-  const { data } = await axios.post(
+  const { data } = await withRetry(() => axios.post(
     'https://api.openai.com/v1/audio/transcriptions',
     form,
     { headers: { Authorization: `Bearer ${apiKey}`, ...form.getHeaders() }, timeout: 60000 }
-  )
+  ), { label: 'transcribeAudio' })
   return (data?.text || '').trim()
 }
 
@@ -340,7 +346,7 @@ async function describeImage(buffer, mimetype) {
   if (!apiKey) throw new Error('OPENAI_API_KEY not set')
   const model = (process.env.OPENAI_MODEL || '').trim() || 'gpt-4o-mini'
   const base64 = Buffer.from(buffer).toString('base64')
-  const { data } = await axios.post(
+  const { data } = await withRetry(() => axios.post(
     'https://api.openai.com/v1/responses',
     {
       model,
@@ -350,7 +356,7 @@ async function describeImage(buffer, mimetype) {
       ]}],
     },
     { headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, timeout: 60000 }
-  )
+  ), { label: 'describeImage' })
   if (typeof data?.output_text === 'string' && data.output_text.trim()) return data.output_text.trim()
   const chunks = []
   for (const item of data?.output || []) {
@@ -520,12 +526,6 @@ bot(
 
     const now = Date.now();
     const key = message.jid;
-    const last = autoReplyLastSentAt.get(key) || 0;
-    if (now - last < AUTO_REPLY_COOLDOWN_MS) {
-      console.log(`[auto-reply] skipped: cooldown active for ${message.jid}`);
-      return;
-    }
-
     // Capture incoming message in history
     chatHistory.addMessage(key, { fromMe: false, text: message.text.trim() });
 
@@ -569,7 +569,11 @@ bot(
       chatHistory.addMessage(key, { fromMe: true, text: reply });
       autoReplyLastSentAt.set(key, now);
     } catch (_e) {
-      // Silent fail for background auto-reply
+      throttledStderr(`auto-reply:${_e?.response?.status || 'err'}`, `[auto-reply] error for ${message.jid}: ${_e?.message || _e}\n`)
+      console.log(`[auto-reply] sending fallback message to ${message.jid}`)
+      try { await message.send(apiErrorMessage(_e)) } catch (sendErr) {
+        process.stderr.write(`[auto-reply] fallback send failed: ${sendErr?.message || sendErr}\n`)
+      }
     } finally {
       store.setGenerating(key, false);
     }
@@ -580,30 +584,73 @@ bot(
 bot(
   { on: 'audio', fromMe: false, type: 'autoDraftReplyAudio' },
   async (message, _match, ctx) => {
-    if (!shouldAutoReplyToContact(message, ctx)) return
+    console.log(`[auto-reply-audio] handler triggered for jid=${message.jid} mimetype=${message.mimetype}`)
+    if (!shouldAutoReplyToContact(message, ctx)) {
+      console.log(`[auto-reply-audio] skipped: not an allowlisted contact (jid=${message.jid})`)
+      return
+    }
 
     const now = Date.now()
     const key = message.jid
-    const last = autoReplyLastSentAt.get(key) || 0
-    if (now - last < AUTO_REPLY_COOLDOWN_MS) return
-    if (store.isGenerating(key)) return
+    if (store.isGenerating(key)) {
+      console.log(`[auto-reply-audio] skipped: already generating for ${message.jid}`)
+      return
+    }
     store.setGenerating(key, true)
     try {
+      console.log(`[auto-reply-audio] downloading voice note from ${message.jid}`)
       const buf = await message.downloadMediaMessage()
-      if (!buf) return
+      if (!buf) {
+        console.log(`[auto-reply-audio] download returned empty buffer for ${message.jid}`)
+        return
+      }
+      console.log(`[auto-reply-audio] transcribing ${buf.length} bytes from ${message.jid}`)
       const transcript = await transcribeAudio(buf)
-      console.log(`[auto-reply] voice note transcript from ${message.jid}: "${transcript}"`)
-      if (!transcript) return
+      console.log(`[auto-reply-audio] transcript from ${message.jid}: "${transcript}"`)
+      if (!transcript) {
+        console.log(`[auto-reply-audio] empty transcript, skipping reply`)
+        return
+      }
       chatHistory.addMessage(key, { fromMe: false, text: `[voice note]: ${transcript}` })
+
+      // in-town override
+      if (isInTownQuestion(transcript)) {
+        const first = firstNameFromMessage(message)
+        const prefix = first ? `Hi ${first}, ` : 'Hi, '
+        const canned = prefix + "I'm not in town yet. Will definitely let you guys know when I've booked the ticket! 🙏🏻😊 Thank you so much."
+        await message.send(canned, { quoted: message.data })
+        chatHistory.addMessage(key, { fromMe: true, text: canned })
+        autoReplyLastSentAt.set(key, now)
+        return
+      }
+
+      // calendar check
+      const calendarReply = await tryCalendarPick(transcript, ctx, message.jid)
+      if (calendarReply) {
+        console.log(`[auto-reply-audio] calendar reply: "${calendarReply}"`)
+        await message.send(calendarReply, { quoted: message.data })
+        chatHistory.addMessage(key, { fromMe: true, text: calendarReply })
+        autoReplyLastSentAt.set(key, now)
+        return
+      }
+
       const conversationHistory = chatHistory.formatHistoryForContext(key)
       const options = await generateDraftReplies(transcript, '', conversationHistory)
       const reply = String(options?.[0] || '').trim()
-      if (!reply) return
+      if (!reply) {
+        console.log(`[auto-reply-audio] generateDraftReplies returned empty reply`)
+        return
+      }
+      console.log(`[auto-reply-audio] sending reply to ${message.jid}: "${reply}"`)
       await message.send(reply, { quoted: message.data })
       chatHistory.addMessage(key, { fromMe: true, text: reply })
       autoReplyLastSentAt.set(key, now)
     } catch (_e) {
-      // silent fail
+      throttledStderr(`auto-reply-audio:${_e?.response?.status || 'err'}`, `[auto-reply-audio] error for ${message.jid}: ${_e?.message || _e}\n`)
+      console.log(`[auto-reply-audio] sending fallback message to ${message.jid}`)
+      try { await message.send(apiErrorMessage(_e)) } catch (sendErr) {
+        process.stderr.write(`[auto-reply-audio] fallback send failed: ${sendErr?.message || sendErr}\n`)
+      }
     } finally {
       store.setGenerating(key, false)
     }
@@ -614,20 +661,30 @@ bot(
 bot(
   { on: 'image', fromMe: false, type: 'autoDraftReplyImage' },
   async (message, _match, ctx) => {
-    if (!shouldAutoReplyToContact(message, ctx)) return
+    console.log(`[auto-reply-image] handler triggered for jid=${message.jid} mimetype=${message.mimetype}`)
+    if (!shouldAutoReplyToContact(message, ctx)) {
+      console.log(`[auto-reply-image] skipped: not an allowlisted contact (jid=${message.jid})`)
+      return
+    }
 
     const now = Date.now()
     const key = message.jid
-    const last = autoReplyLastSentAt.get(key) || 0
-    if (now - last < AUTO_REPLY_COOLDOWN_MS) return
-    if (store.isGenerating(key)) return
+    if (store.isGenerating(key)) {
+      console.log(`[auto-reply-image] skipped: already generating for ${message.jid}`)
+      return
+    }
     store.setGenerating(key, true)
     try {
+      console.log(`[auto-reply-image] downloading image from ${message.jid}`)
       const buf = await message.downloadMediaMessage()
-      if (!buf) return
+      if (!buf) {
+        console.log(`[auto-reply-image] download returned empty buffer for ${message.jid}`)
+        return
+      }
       const mimetype = (message.mimetype || 'image/jpeg').split(';')[0].trim()
+      console.log(`[auto-reply-image] describing ${buf.length} bytes (${mimetype}) from ${message.jid}`)
       const description = await describeImage(buf, mimetype)
-      console.log(`[auto-reply] image from ${message.jid}: "${description}"`)
+      console.log(`[auto-reply-image] description from ${message.jid}: "${description}"`)
       const caption = message.text?.trim() || ''
       const incomingText = caption
         ? `[sent an image: ${description}] "${caption}"`
@@ -636,12 +693,20 @@ bot(
       const conversationHistory = chatHistory.formatHistoryForContext(key)
       const options = await generateDraftReplies(incomingText, '', conversationHistory)
       const reply = String(options?.[0] || '').trim()
-      if (!reply) return
+      if (!reply) {
+        console.log(`[auto-reply-image] generateDraftReplies returned empty reply`)
+        return
+      }
+      console.log(`[auto-reply-image] sending reply to ${message.jid}: "${reply}"`)
       await message.send(reply, { quoted: message.data })
       chatHistory.addMessage(key, { fromMe: true, text: reply })
       autoReplyLastSentAt.set(key, now)
     } catch (_e) {
-      // silent fail
+      throttledStderr(`auto-reply-image:${_e?.response?.status || 'err'}`, `[auto-reply-image] error for ${message.jid}: ${_e?.message || _e}\n`)
+      console.log(`[auto-reply-image] sending fallback message to ${message.jid}`)
+      try { await message.send(apiErrorMessage(_e)) } catch (sendErr) {
+        process.stderr.write(`[auto-reply-image] fallback send failed: ${sendErr?.message || sendErr}\n`)
+      }
     } finally {
       store.setGenerating(key, false)
     }
