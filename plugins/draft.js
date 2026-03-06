@@ -126,7 +126,105 @@ function formatDay(d) {
   return `${d.getDate()} ${months[d.getMonth()]}`;
 }
 
-async function tryCalendarPick(messageText, ctx) {
+function isOtpMessage(text) {
+  const t = String(text || "").toLowerCase();
+  const keywords = [
+    /verification\s*code/,
+    /security\s*code/,
+    /confirmation\s*code/,
+    /authentication\s*code/,
+    /\botp\b/,
+    /one[- ]time\s*password/,
+    /never\s*share/,
+    /do\s*not\s*share/,
+    /\bcode\s*is\s*[:\-]?\s*[a-z0-9]{4,8}\b/,
+    /\bcode\s*:\s*[a-z0-9]{4,8}\b/,
+    /\buse\s+code\s*[a-z0-9]{4,8}\b/
+  ];
+  for (const regex of keywords) {
+    if (regex.test(t)) return true;
+  }
+  return false;
+}
+
+// Map phone country code prefixes → IANA timezone.
+// Longer prefixes are matched first so e.g. 852 wins over 85.
+const COUNTRY_CODE_TZ = [
+  // Asia
+  ["852", "Asia/Hong_Kong"],
+  ["853", "Asia/Macau"],
+  ["886", "Asia/Taipei"],
+  ["855", "Asia/Phnom_Penh"],
+  ["856", "Asia/Vientiane"],
+  ["880", "Asia/Dhaka"],
+  ["960", "Indian/Maldives"],
+  ["86", "Asia/Shanghai"],
+  ["81", "Asia/Tokyo"],
+  ["82", "Asia/Seoul"],
+  ["65", "Asia/Singapore"],
+  ["60", "Asia/Kuala_Lumpur"],
+  ["66", "Asia/Bangkok"],
+  ["84", "Asia/Ho_Chi_Minh"],
+  ["62", "Asia/Jakarta"],
+  ["63", "Asia/Manila"],
+  ["91", "Asia/Kolkata"],
+  ["92", "Asia/Karachi"],
+  ["94", "Asia/Colombo"],
+  ["971", "Asia/Dubai"],
+  ["972", "Asia/Jerusalem"],
+  ["966", "Asia/Riyadh"],
+  ["90", "Europe/Istanbul"],
+  // Oceania
+  ["61", "Australia/Sydney"],
+  ["64", "Pacific/Auckland"],
+  // Europe
+  ["44", "Europe/London"],
+  ["33", "Europe/Paris"],
+  ["49", "Europe/Berlin"],
+  ["34", "Europe/Madrid"],
+  ["39", "Europe/Rome"],
+  ["31", "Europe/Amsterdam"],
+  ["41", "Europe/Zurich"],
+  ["46", "Europe/Stockholm"],
+  ["47", "Europe/Oslo"],
+  ["45", "Europe/Copenhagen"],
+  ["32", "Europe/Brussels"],
+  ["48", "Europe/Warsaw"],
+  ["43", "Europe/Vienna"],
+  ["351", "Europe/Lisbon"],
+  ["7", "Europe/Moscow"],
+  // Americas
+  ["1", "America/New_York"],
+  ["55", "America/Sao_Paulo"],
+  ["52", "America/Mexico_City"],
+  ["54", "America/Argentina/Buenos_Aires"],
+  ["56", "America/Santiago"],
+  ["57", "America/Bogota"],
+  // Africa
+  ["27", "Africa/Johannesburg"],
+  ["20", "Africa/Cairo"],
+  ["234", "Africa/Lagos"],
+  ["254", "Africa/Nairobi"],
+]
+
+// Sort longest prefix first to avoid false matches (e.g. 852 matched before 85)
+const SORTED_COUNTRY_CODE_TZ = [...COUNTRY_CODE_TZ].sort((a, b) => b[0].length - a[0].length)
+
+/**
+ * Given a WhatsApp JID like "85261924337@s.whatsapp.net",
+ * extract the phone number and infer IANA timezone from its country code.
+ * Returns null if unknown.
+ */
+function timezoneFromJid(jid) {
+  const num = String(jid || "").split("@")[0].replace(/\D/g, "")
+  if (!num) return null
+  for (const [prefix, tz] of SORTED_COUNTRY_CODE_TZ) {
+    if (num.startsWith(prefix)) return tz
+  }
+  return null
+}
+
+async function tryCalendarPick(messageText, ctx, senderJid = null) {
   const enabled = truthy(
     ctx?.AUTO_DRAFT_CALENDAR || process.env.AUTO_DRAFT_CALENDAR || "true",
   );
@@ -146,11 +244,17 @@ async function tryCalendarPick(messageText, ctx) {
     process.env.GOOGLE_CALENDAR_ID ||
     "primary"
   ).trim();
+  // Infer timezone from sender's phone country code, fall back to config/env
+  const inferredTz = senderJid ? timezoneFromJid(senderJid) : null;
   const timeZone = (
+    inferredTz ||
     ctx?.GOOGLE_TIMEZONE ||
     process.env.GOOGLE_TIMEZONE ||
     "Asia/Hong_Kong"
   ).trim();
+  if (inferredTz) {
+    console.log(`[auto-reply] inferred timezone from sender (${senderJid}): ${inferredTz}`);
+  }
 
   const dayStrs = parsed.days.map((d) => d.toISOString().slice(0, 10));
   console.log(`[auto-reply] checking Google Calendar for days: ${dayStrs.join(", ")} (calendarId=${calendarId}, tz=${timeZone})`);
@@ -345,6 +449,12 @@ bot(
     // ignore command-like messages
     if (/^[./!#]/.test(message.text.trim())) return;
 
+    // ignore OTP messages
+    if (isOtpMessage(message.text.trim())) {
+      console.log(`[auto-reply] skipped: message looks like an OTP (jid=${message.jid})`);
+      return;
+    }
+
     const now = Date.now();
     const key = message.jid;
     const last = autoReplyLastSentAt.get(key) || 0;
@@ -375,7 +485,7 @@ bot(
 
       // Calendar-aware date picking
       console.log(`[auto-reply] received message from ${message.jid}: "${message.text.trim()}"`);
-      const calendarReply = await tryCalendarPick(message.text, ctx);
+      const calendarReply = await tryCalendarPick(message.text, ctx, message.jid);
       if (calendarReply) {
         console.log(`[auto-reply] calendar reply selected: "${calendarReply}"`);
         await message.send(calendarReply, { quoted: message.data });
