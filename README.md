@@ -9,8 +9,6 @@ A powerful and feature-rich WhatsApp bot supporting multiple sessions, designed 
 - **Automated Task Execution** – Perform actions without manual intervention.
 - **Easy Deployment** – Multiple hosting options for quick setup.
 
-### Supported Languages
-
 This bot supports multiple languages for responses. Set your preferred language using the `BOT_LANG` variable in the `config.env` file.
 
 **Available languages:**
