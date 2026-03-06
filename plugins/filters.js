@@ -45,6 +45,7 @@ bot(
 )
 
 bot({ on: 'text', fromMe: false, type: 'filterOrLydia' }, async (message) => {
+  if (message.isGroup) return
   console.log(`[filterOrLydia] fired for jid=${message.jid}`)
   const filters = await getFilter(message.jid, message.id)
 
