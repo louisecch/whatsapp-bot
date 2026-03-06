@@ -257,12 +257,18 @@ async function tryCalendarPick(messageText, ctx, senderJid = null) {
   }
 
   const dayStrs = parsed.days.map((d) => d.toISOString().slice(0, 10));
-  console.log(`[auto-reply] checking Google Calendar for days: ${dayStrs.join(", ")} (calendarId=${calendarId}, tz=${timeZone})`);
+  const hasTimes = parsed.times && parsed.times.length > 0;
+  if (hasTimes) {
+    console.log(`[auto-reply] checking Google Calendar for days: ${dayStrs.join(", ")} at times: ${parsed.times.map(t => `${t.hours}:${String(t.mins).padStart(2, '0')}`).join(', ')} (tz=${timeZone})`);
+  } else {
+    console.log(`[auto-reply] checking Google Calendar for days: ${dayStrs.join(", ")} (calendarId=${calendarId}, tz=${timeZone})`);
+  }
 
   let availability;
   try {
     availability = await isFreeOnDays({
       days: parsed.days,
+      times: parsed.times,
       calendarId,
       timeZone,
     });
@@ -281,8 +287,14 @@ async function tryCalendarPick(messageText, ctx, senderJid = null) {
   );
 
   if (freeDays.length === 0) {
-    // both busy: ask for alternatives
     const opts = parsed.days.map(formatDay).join(" or ");
+    if (hasTimes && parsed.times.length === 1) {
+      const t = parsed.times[0];
+      const suffix = t.hours < 12 ? 'am' : 'pm';
+      const displayH = t.hours > 12 ? t.hours - 12 : t.hours || 12;
+      const displayTime = `${displayH}${t.mins > 0 ? ':' + String(t.mins).padStart(2, '0') : ''}${suffix}`;
+      return `Hmm I think I'm busy at ${displayTime} on ${opts} 😣 could you suggest a different time or date? 🙏🏻`;
+    }
     return `Hmm I think I'm booked on ${opts} 😣 could you suggest a couple other dates? 🙏🏻`;
   }
 
@@ -291,11 +303,20 @@ async function tryCalendarPick(messageText, ctx, senderJid = null) {
   const pick = freeDays[0];
   const pickStr = formatDay(pick);
 
+  // Build time string if a specific time was requested
+  let timeStr = '';
+  if (hasTimes && parsed.times.length === 1) {
+    const t = parsed.times[0];
+    const suffix = t.hours < 12 ? 'am' : 'pm';
+    const displayH = t.hours > 12 ? t.hours - 12 : (t.hours === 0 ? 12 : t.hours);
+    timeStr = ` at ${displayH}${t.mins > 0 ? ':' + String(t.mins).padStart(2, '0') : ''}${suffix}`;
+  }
+
   // If there were multiple options, acknowledge choice
   if (parsed.days.length >= 2) {
-    return `${pickStr} works for me 😊`;
+    return `${pickStr}${timeStr} works for me 😊`;
   }
-  return `That works for me 😊`;
+  return `That${timeStr ? ' time' : ''} works for me 😊`;
 }
 
 async function sendText(message, toJid, text, options = {}) {
