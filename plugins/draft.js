@@ -22,7 +22,7 @@
 const axios = require("axios");
 const FormData = require("form-data");
 const { bot } = require("../lib");
-const { generateDraftReplies, withRetry, throttledStderr } = require("../lib/draftstyle");
+const { generateDraftReplies, withRetry, throttledStderr, summarizeContext } = require("../lib/draftstyle");
 const store = require("../lib/draftstore");
 const { jidToNum } = require("../lib");
 const chatHistory = require("../lib/chathistory");
@@ -320,8 +320,13 @@ async function tryCalendarPick(messageText, ctx, senderJid = null) {
   return `That${timeStr ? ' time' : ''} works for me 😊`;
 }
 
-function safeHistory(key) {
+async function safeHistory(key) {
   try {
+    if (chatHistory.needsSummarization(key)) {
+      const older = chatHistory.getOlderMessagesText(key)
+      const summary = await summarizeContext(older)
+      if (summary) chatHistory.setHistorySummary(key, summary)
+    }
     const h = chatHistory.formatHistoryForContext(key)
     return typeof h === 'string' ? h : ''
   } catch {
@@ -475,7 +480,7 @@ bot(
 
     try {
       const conversationHistory =
-        safeHistory(sourceJid);
+        await safeHistory(sourceJid);
       const options = await generateDraftReplies(
         targetText,
         extraContext,
@@ -566,7 +571,7 @@ bot(
         return;
       }
 
-      const conversationHistory = safeHistory(key);
+      const conversationHistory = await safeHistory(key);
       const options = await generateDraftReplies(
         message.text.trim(),
         "",
@@ -643,7 +648,7 @@ bot(
         return
       }
 
-      const conversationHistory = safeHistory(key)
+      const conversationHistory = await safeHistory(key)
       const options = await generateDraftReplies(transcript, '', conversationHistory)
       const reply = String(options?.[0] || '').trim()
       if (!reply) {
@@ -699,7 +704,7 @@ bot(
         ? `[sent an image: ${description}] "${caption}"`
         : `[sent an image: ${description}]`
       chatHistory.addMessage(key, { fromMe: false, text: incomingText })
-      const conversationHistory = safeHistory(key)
+      const conversationHistory = await safeHistory(key)
       const options = await generateDraftReplies(incomingText, '', conversationHistory)
       const reply = String(options?.[0] || '').trim()
       if (!reply) {
