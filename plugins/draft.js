@@ -19,6 +19,8 @@
  * DRAFT_GROUP_ACK    – optional, if true posts a small "check DM" ack in group
  */
 
+const axios = require("axios");
+const FormData = require("form-data");
 const { bot } = require("../lib");
 const { generateDraftReplies } = require("../lib/draftstyle");
 const store = require("../lib/draftstore");
@@ -319,6 +321,46 @@ async function tryCalendarPick(messageText, ctx, senderJid = null) {
   return `That${timeStr ? ' time' : ''} works for me 😊`;
 }
 
+async function transcribeAudio(buffer) {
+  const apiKey = (process.env.OPENAI_API_KEY || '').trim()
+  if (!apiKey) throw new Error('OPENAI_API_KEY not set')
+  const form = new FormData()
+  form.append('file', buffer, { filename: 'voice.ogg', contentType: 'audio/ogg' })
+  form.append('model', 'whisper-1')
+  const { data } = await axios.post(
+    'https://api.openai.com/v1/audio/transcriptions',
+    form,
+    { headers: { Authorization: `Bearer ${apiKey}`, ...form.getHeaders() }, timeout: 60000 }
+  )
+  return (data?.text || '').trim()
+}
+
+async function describeImage(buffer, mimetype) {
+  const apiKey = (process.env.OPENAI_API_KEY || '').trim()
+  if (!apiKey) throw new Error('OPENAI_API_KEY not set')
+  const model = (process.env.OPENAI_MODEL || '').trim() || 'gpt-4o-mini'
+  const base64 = Buffer.from(buffer).toString('base64')
+  const { data } = await axios.post(
+    'https://api.openai.com/v1/responses',
+    {
+      model,
+      input: [{ role: 'user', content: [
+        { type: 'input_text', text: 'Briefly describe what is in this image in 1-2 sentences.' },
+        { type: 'input_image', image_url: `data:${mimetype};base64,${base64}` },
+      ]}],
+    },
+    { headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, timeout: 60000 }
+  )
+  if (typeof data?.output_text === 'string' && data.output_text.trim()) return data.output_text.trim()
+  const chunks = []
+  for (const item of data?.output || []) {
+    for (const part of item?.content || []) {
+      if (typeof part?.text === 'string') chunks.push(part.text)
+    }
+  }
+  return chunks.join('\n').trim() || '[image]'
+}
+
 async function sendText(message, toJid, text, options = {}) {
   // Same chat: use framework helper (supports quoted, etc.)
   if (!toJid || toJid === message.jid) {
@@ -533,6 +575,78 @@ bot(
     }
   },
 );
+
+// ── auto-reply: voice notes ──────────────────────────────────────────────────
+bot(
+  { on: 'audio', fromMe: false, type: 'autoDraftReplyAudio' },
+  async (message, _match, ctx) => {
+    if (!shouldAutoReplyToContact(message, ctx)) return
+
+    const now = Date.now()
+    const key = message.jid
+    const last = autoReplyLastSentAt.get(key) || 0
+    if (now - last < AUTO_REPLY_COOLDOWN_MS) return
+    if (store.isGenerating(key)) return
+    store.setGenerating(key, true)
+    try {
+      const buf = await message.downloadMediaMessage()
+      if (!buf) return
+      const transcript = await transcribeAudio(buf)
+      console.log(`[auto-reply] voice note transcript from ${message.jid}: "${transcript}"`)
+      if (!transcript) return
+      chatHistory.addMessage(key, { fromMe: false, text: `[voice note]: ${transcript}` })
+      const conversationHistory = chatHistory.formatHistoryForContext(key)
+      const options = await generateDraftReplies(transcript, '', conversationHistory)
+      const reply = String(options?.[0] || '').trim()
+      if (!reply) return
+      await message.send(reply, { quoted: message.data })
+      chatHistory.addMessage(key, { fromMe: true, text: reply })
+      autoReplyLastSentAt.set(key, now)
+    } catch (_e) {
+      // silent fail
+    } finally {
+      store.setGenerating(key, false)
+    }
+  },
+)
+
+// ── auto-reply: images ───────────────────────────────────────────────────────
+bot(
+  { on: 'image', fromMe: false, type: 'autoDraftReplyImage' },
+  async (message, _match, ctx) => {
+    if (!shouldAutoReplyToContact(message, ctx)) return
+
+    const now = Date.now()
+    const key = message.jid
+    const last = autoReplyLastSentAt.get(key) || 0
+    if (now - last < AUTO_REPLY_COOLDOWN_MS) return
+    if (store.isGenerating(key)) return
+    store.setGenerating(key, true)
+    try {
+      const buf = await message.downloadMediaMessage()
+      if (!buf) return
+      const mimetype = (message.mimetype || 'image/jpeg').split(';')[0].trim()
+      const description = await describeImage(buf, mimetype)
+      console.log(`[auto-reply] image from ${message.jid}: "${description}"`)
+      const caption = message.text?.trim() || ''
+      const incomingText = caption
+        ? `[sent an image: ${description}] "${caption}"`
+        : `[sent an image: ${description}]`
+      chatHistory.addMessage(key, { fromMe: false, text: incomingText })
+      const conversationHistory = chatHistory.formatHistoryForContext(key)
+      const options = await generateDraftReplies(incomingText, '', conversationHistory)
+      const reply = String(options?.[0] || '').trim()
+      if (!reply) return
+      await message.send(reply, { quoted: message.data })
+      chatHistory.addMessage(key, { fromMe: true, text: reply })
+      autoReplyLastSentAt.set(key, now)
+    } catch (_e) {
+      // silent fail
+    } finally {
+      store.setGenerating(key, false)
+    }
+  },
+)
 
 // ── .send ──────────────────────────────────────────────────────────────────
 
