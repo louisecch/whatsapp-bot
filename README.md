@@ -27,15 +27,7 @@ The bot includes an intelligent auto-reply system (enabled via `plugins/draft.js
 
 ### Deployment Guide
 
-### 1️⃣ Deploy on Koyeb
-
-[Deploy Now](https://levanter-delta.vercel.app/) to set up your bot on Koyeb.
-
-### 2️⃣ Deploy on Render
-
-[Deploy Now](https://levanter-delta.vercel.app/) to set up your bot on Render.
-
-### 3️⃣ Deploy on a VPS or PC (Ubuntu Example)
+### Deploy on a VPS or PC (Ubuntu Example)
 
 #### **Quick Installation**
 
