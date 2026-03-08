@@ -48,6 +48,8 @@ const DEFAULT_AUTO_REPLY_BLOCKLIST = [
   "85267473751",
   "85291266039",
   "447913950794",
+  "07913950794",
+  "07475073883",
 ];
 const autoReplyLastSentAt = new Map(); // jid -> timestamp (kept for future use)
 
@@ -86,7 +88,9 @@ function shouldAutoReplyToContact(message, ctx) {
 
   const contactNum = normalizePhone(jidToNum(message.jid));
   const blocklist = getAutoReplyBlocklist(ctx);
-  return !blocklist.includes(contactNum);
+  const blocked = blocklist.includes(contactNum);
+  console.log(`[auto-reply] blocklist check: jid=${message.jid} contactNum="${contactNum}" blocked=${blocked} blocklist=${JSON.stringify(blocklist)}`);
+  return !blocked;
 }
 
 function firstNameFromMessage(message) {
@@ -373,10 +377,12 @@ async function describeImage(buffer, mimetype) {
     'https://api.openai.com/v1/responses',
     {
       model,
-      input: [{ role: 'user', content: [
-        { type: 'input_text', text: 'Briefly describe what is in this image in 1-2 sentences.' },
-        { type: 'input_image', image_url: `data:${mimetype};base64,${base64}` },
-      ]}],
+      input: [{
+        role: 'user', content: [
+          { type: 'input_text', text: 'Briefly describe what is in this image in 1-2 sentences.' },
+          { type: 'input_image', image_url: `data:${mimetype};base64,${base64}` },
+        ]
+      }],
     },
     { headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, timeout: 60000 }
   ), { label: 'describeImage' })
