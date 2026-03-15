@@ -39,6 +39,7 @@ const CLOSE_CONTACTS_LIST = [
   "447913950794",
   "07913950794",
   "07475073883",
+  "447475073883",
   "85261924337",
 ];
 const autoReplyLastSentAt = new Map(); // jid -> timestamp (kept for future use)
@@ -64,6 +65,17 @@ function normalizePhone(raw) {
   return String(raw || "").replace(/\D+/g, "");
 }
 
+/**
+ * Robustly extract the phone number from a WhatsApp JID.
+ * Handles both regular JIDs (447913950794@s.whatsapp.net)
+ * and multi-device JIDs (447913950794:5@s.whatsapp.net).
+ */
+function jidToPhone(jid) {
+  const bare = String(jid || "").split("@")[0]; // strip @server
+  const num = bare.split(":")[0];               // strip :device suffix
+  return num.replace(/\D+/g, "");
+}
+
 function getCloseContactsList(ctx) {
   const envRaw = (
     ctx?.CLOSE_CONTACTS_LIST ||
@@ -83,7 +95,7 @@ function shouldAutoReplyToContact(message, ctx) {
   );
   if (!enabled) return false;
 
-  const contactNum = normalizePhone(jidToNum(message.jid));
+  const contactNum = jidToPhone(message.jid);
   const closeContacts = getCloseContactsList(ctx);
   const isCloseContact = closeContacts.includes(contactNum);
   console.log(`[auto-reply] close contacts check: jid=${message.jid} contactNum="${contactNum}" isCloseContact=${isCloseContact}`);
