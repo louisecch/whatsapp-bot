@@ -53,7 +53,14 @@ const DEFAULT_AUTO_REPLY_BLOCKLIST = [
 ];
 const autoReplyLastSentAt = new Map(); // jid -> timestamp (kept for future use)
 
-// ── helpers ───────────2─────────────────────────────────────────────────────
+// ── helpers ──────────────────────────────────────────────────────────────────
+
+/** Wait a random delay between minMs and maxMs milliseconds. */
+function randomDelay(minMs = 30000, maxMs = 60000) {
+  const ms = Math.floor(Math.random() * (maxMs - minMs + 1)) + minMs;
+  console.log(`[auto-reply] waiting ${Math.round(ms / 1000)}s before replying…`);
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 function truthy(v) {
   return ["1", "true", "yes", "y", "on"].includes(
@@ -559,6 +566,7 @@ bot(
 
     // Queue AI generation — messages are processed in order, never dropped mid-conversation
     store.enqueue(key, async () => {
+      await randomDelay();
       const now = Date.now();
       try {
         // Hard-coded rule override
@@ -621,6 +629,7 @@ bot(
 
     const key = message.jid
     store.enqueue(key, async () => {
+      await randomDelay();
       const now = Date.now()
       try {
         console.log(`[auto-reply-audio] downloading voice note from ${message.jid}`)
@@ -695,6 +704,7 @@ bot(
 
     const key = message.jid
     store.enqueue(key, async () => {
+      await randomDelay();
       const now = Date.now()
       try {
         console.log(`[auto-reply-image] downloading image from ${message.jid}`)
