@@ -40,7 +40,6 @@ const CLOSE_CONTACTS_LIST = [
   "07913950794",
   "07475073883",
   "447475073883",
-  "85261924337",
 ];
 const autoReplyLastSentAt = new Map(); // jid -> timestamp (kept for future use)
 
