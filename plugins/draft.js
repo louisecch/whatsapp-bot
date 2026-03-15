@@ -29,20 +29,9 @@ const chatHistory = require("../lib/chathistory");
 const { extractDateOptions } = require("../lib/dateOptions");
 const { isFreeOnDays } = require("../lib/googleCalendar");
 
-// Backed-up original allowlist (kept for reference)
-// const _ORIGINAL_ALLOWLIST = [
-//   "85261924337",
-//   "85298017183",
-//   "85269981788",
-//   "85297513151",
-//   "85298635033",
-//   "85254841551",
-//   "85290633373",
-//   "85263794109",
-// ];
-
-// Blocklist — reply to everyone in DMs EXCEPT these numbers
-const DEFAULT_AUTO_REPLY_BLOCKLIST = [
+// Close Contacts List — the bot will NOT auto-reply to these numbers.
+// Add phone numbers (digits only, with country code) for contacts you want to reply to personally.
+const CLOSE_CONTACTS_LIST = [
   "14155098648",
   "85261701066",
   "85267473751",
@@ -50,6 +39,7 @@ const DEFAULT_AUTO_REPLY_BLOCKLIST = [
   "447913950794",
   "07913950794",
   "07475073883",
+  "85261924337",
 ];
 const autoReplyLastSentAt = new Map(); // jid -> timestamp (kept for future use)
 
@@ -74,16 +64,16 @@ function normalizePhone(raw) {
   return String(raw || "").replace(/\D+/g, "");
 }
 
-function getAutoReplyBlocklist(ctx) {
+function getCloseContactsList(ctx) {
   const envRaw = (
-    ctx?.AUTO_DRAFT_BLOCKLIST ||
-    process.env.AUTO_DRAFT_BLOCKLIST ||
+    ctx?.CLOSE_CONTACTS_LIST ||
+    process.env.CLOSE_CONTACTS_LIST ||
     ""
   )
     .split(",")
     .map((x) => normalizePhone(x))
     .filter(Boolean);
-  return envRaw.length ? envRaw : DEFAULT_AUTO_REPLY_BLOCKLIST;
+  return envRaw.length ? envRaw : CLOSE_CONTACTS_LIST;
 }
 
 function shouldAutoReplyToContact(message, ctx) {
@@ -94,10 +84,10 @@ function shouldAutoReplyToContact(message, ctx) {
   if (!enabled) return false;
 
   const contactNum = normalizePhone(jidToNum(message.jid));
-  const blocklist = getAutoReplyBlocklist(ctx);
-  const blocked = blocklist.includes(contactNum);
-  console.log(`[auto-reply] blocklist check: jid=${message.jid} contactNum="${contactNum}" blocked=${blocked} blocklist=${JSON.stringify(blocklist)}`);
-  return !blocked;
+  const closeContacts = getCloseContactsList(ctx);
+  const isCloseContact = closeContacts.includes(contactNum);
+  console.log(`[auto-reply] close contacts check: jid=${message.jid} contactNum="${contactNum}" isCloseContact=${isCloseContact}`);
+  return !isCloseContact;
 }
 
 function firstNameFromMessage(message) {
