@@ -577,7 +577,7 @@ bot(
           const canned =
             prefix +
             "I'm not in town yet. Will definitely let you guys know when I've booked the ticket! 🙏🏻😊 Thank you so much.";
-          await message.send(canned, { quoted: message.data });
+          await message.send(canned);
           chatHistory.addMessage(key, { fromMe: true, text: canned });
           autoReplyLastSentAt.set(key, now);
           return;
@@ -588,7 +588,7 @@ bot(
         const calendarReply = await tryCalendarPick(message.text, ctx, message.jid);
         if (calendarReply) {
           console.log(`[auto-reply] calendar reply selected: "${calendarReply}"`);
-          await message.send(calendarReply, { quoted: message.data });
+          await message.send(calendarReply);
           chatHistory.addMessage(key, { fromMe: true, text: calendarReply });
           autoReplyLastSentAt.set(key, now);
           return;
@@ -602,7 +602,7 @@ bot(
         );
         const reply = String(options?.[0] || "").trim();
         if (!reply) return;
-        await message.send(reply, { quoted: message.data });
+        await message.send(reply);
         chatHistory.addMessage(key, { fromMe: true, text: reply });
         autoReplyLastSentAt.set(key, now);
       } catch (_e) {
@@ -653,7 +653,7 @@ bot(
           const first = firstNameFromMessage(message)
           const prefix = first ? `Hi ${first}, ` : 'Hi, '
           const canned = prefix + "I'm not in town yet. Will definitely let you guys know when I've booked the ticket! 🙏🏻😊 Thank you so much."
-          await message.send(canned, { quoted: message.data })
+          await message.send(canned)
           chatHistory.addMessage(key, { fromMe: true, text: canned })
           autoReplyLastSentAt.set(key, now)
           return
@@ -663,7 +663,7 @@ bot(
         const calendarReply = await tryCalendarPick(transcript, ctx, message.jid)
         if (calendarReply) {
           console.log(`[auto-reply-audio] calendar reply: "${calendarReply}"`)
-          await message.send(calendarReply, { quoted: message.data })
+          await message.send(calendarReply)
           chatHistory.addMessage(key, { fromMe: true, text: calendarReply })
           autoReplyLastSentAt.set(key, now)
           return
@@ -677,7 +677,7 @@ bot(
           return
         }
         console.log(`[auto-reply-audio] sending reply to ${message.jid}: "${reply}"`)
-        await message.send(reply, { quoted: message.data })
+        await message.send(reply)
         chatHistory.addMessage(key, { fromMe: true, text: reply })
         autoReplyLastSentAt.set(key, now)
       } catch (_e) {
@@ -731,7 +731,7 @@ bot(
           return
         }
         console.log(`[auto-reply-image] sending reply to ${message.jid}: "${reply}"`)
-        await message.send(reply, { quoted: message.data })
+        await message.send(reply)
         chatHistory.addMessage(key, { fromMe: true, text: reply })
         autoReplyLastSentAt.set(key, now)
       } catch (_e) {
